@@ -7,3 +7,7 @@
 PrereqLL::PrereqLL(){
     head = nullptr;
 }
+
+void PrereqLL::add_prereq(PrereqNode* pn){
+    
+}
