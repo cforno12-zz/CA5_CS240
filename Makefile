@@ -1,5 +1,5 @@
-SOURCE= CA5.cpp
-OBJECT= CA.o
+SOURCE= CA5.cpp Req_graph.h Req_graph.cpp Course_Node.h Course_Node.cpp PrereqLL.h PrereqLL.cpp PrereqNode.h PrereqNode.cpp Course.h Course.cpp
+OBJECT= CA.o Req_graph.o Course_Node.o PrereqLL.o PrereqNode.o Course.o
 CXX:= g++
 CXXFLAGS:= -c -Wall -I=.
 
@@ -12,7 +12,11 @@ link: compile $(SOURCE) $(OBJECT)
 
 compile: $(SOURCE)
 	$(CXX) $(CXXFLAGS) CA5.cpp
-
+	$(CXX) $(CXXFLAGS) Req_graph.cpp
+	$(CXX) $(CXXFLAGS) Course_Node.cpp
+	$(CXX) $(CXXFLAGS) PrereqLL.cpp
+	$(CXX) $(CXXFLAGS) PrereqNode.cpp
+	$(CXX) $(CXXFLAGS) Course.cpp
 
 clean:
 	rm -f *.o run

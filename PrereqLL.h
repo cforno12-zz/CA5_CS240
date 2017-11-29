@@ -8,6 +8,7 @@
 
 class PrereqLL{
 public:
-	PrereqNode* head;
+    PrereqNode();
+    PrereqNode* head;
 };
 #endif
