@@ -1,5 +1,6 @@
 #ifndef COURSE_NODE
 #define COURSE_NODE
+
 #include <iostream>
 #include <stdlib.h>
 #include <string.h>
