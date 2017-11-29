@@ -9,9 +9,9 @@ using namespace std;
 
 class Course {
 public:
-	Course();
-	string course_name;
-	char type;
+    Course(string c, char t);
+    string course_name;
+    char type;
 };
 
 #endif

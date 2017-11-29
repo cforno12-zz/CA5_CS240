@@ -12,8 +12,8 @@ using namespace std;
 
 class Req_graph {
  public:
+    vector<Course_Node*> graph;
     Req_graph();
-    vector<Course_Node> graph;
     //other functions to traverse and manipulate the graph will go here.
     void add_course(Course_Node* cn);
 };

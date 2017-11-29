@@ -1,5 +1,5 @@
 SOURCE= CA5.cpp Req_graph.h Req_graph.cpp Course_Node.h Course_Node.cpp PrereqLL.h PrereqLL.cpp PrereqNode.h PrereqNode.cpp Course.h Course.cpp
-OBJECT= CA.o Req_graph.o Course_Node.o PrereqLL.o PrereqNode.o Course.o
+OBJECT= CA5.o Req_graph.o Course_Node.o PrereqLL.o PrereqNode.o Course.o
 CXX:= g++
 CXXFLAGS:= -c -Wall -I=.
 
@@ -19,7 +19,7 @@ compile: $(SOURCE)
 	$(CXX) $(CXXFLAGS) Course.cpp
 
 clean:
-	rm -f *.o run
+	rm -f *.o schedule.exe
 
 compress: clean
 	tar -cvvf CA5.tar *.* Makefile
