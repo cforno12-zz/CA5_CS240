@@ -7,14 +7,16 @@
 
 #include "Course.h"
 #include "PrereqLL.h"
+class PrereqLL;
 
 using namespace std;
 
 class Course_Node {
 public:
-	Course_Node();
 	Course* course;
 	PrereqLL* prereqs;
+	Course_Node();
+	Course_Node(Course* c);
 };
 
 #endif

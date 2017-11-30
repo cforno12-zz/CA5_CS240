@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "PrereqNode.h"
+class PrereqNode;
 
 class PrereqLL{
 public:

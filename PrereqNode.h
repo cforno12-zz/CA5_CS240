@@ -5,13 +5,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "Course.h"
+#include "Course_Node.h"
+class Course_Node;
 
 class PrereqNode{
  public:
-    PrereqNode();
-    Course * data;
+	Course_Node* data;
     PrereqNode* next;
+    PrereqNode();
+    PrereqNode(Course_Node* c);
 };
 
 #endif

@@ -8,3 +8,8 @@ PrereqNode::PrereqNode(){
     data = nullptr;
     next = nullptr;
 }
+
+PrereqNode::PrereqNode(Course_Node* c){
+    data = c;
+    next = nullptr;
+}
