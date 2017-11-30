@@ -11,7 +11,7 @@ void total();
 
 int main(int argc, char ** argv){
 	Req_graph* graph = new Req_graph();
-	fstream require;
+	fstream require, offering;
 	string line;
 	int total = 0;
 
@@ -40,7 +40,7 @@ int main(int argc, char ** argv){
 
 			//retrieve type of class
 			char type = *lineVect[2].c_str();
-			Course* curr_course = new Course(course, type);
+			Course* curr_course = new Course(course, type, 'A');
 			Course_Node* curr_course_node = new Course_Node(curr_course);
 			//check if course has prereqs
 			for(int i = 3; i < lineVect.size(); i++){
