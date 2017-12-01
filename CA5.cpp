@@ -17,7 +17,7 @@ int main(int argc, char ** argv){
 	require.open(argv[1]); // requirements file
 	if(!require){
 		cout << "Unable to read the first file" << endl;
-		//exit(0);
+		exit(0);
 	}
 	while(getline(require, line)){
 		//store line into vector lineVect
@@ -48,7 +48,7 @@ int main(int argc, char ** argv){
 
 		} else {
 			cout << "Bad file." << endl;
-			//exit(0);
+			exit(0);
 		}
 	}
 	//now to load the prereqs
@@ -66,19 +66,26 @@ int main(int argc, char ** argv){
 		istream_iterator<string> begin(ss);
 		istream_iterator<string> end;
 		vector<string> lineVect(begin, end);
+		cout << "you gud01" << endl;
 		if(lineVect[0] == "COURSE"){
 			for(unsigned int i = 0; i<graph->graph.size(); i++){
+				cout << "you gud02" << endl;
 				if(graph->graph[i]->course->course_name == lineVect[1]){ // finding course we're on
+					cout << "you gud03" << endl;
 					curr = graph->graph[i];
 				}
 				for(unsigned int j=3; j<lineVect.size(); j++){
+					cout << "you gud04" << endl;
 					if(graph->graph[i]->course->course_name == lineVect[j]){ // to find the prereq, not sure how to know how many on the line
+						cout << "you gud05" << endl;
 						prereq = graph->graph[i];
+						PrereqNode* prereq_node = new PrereqNode(prereq);
+						cout << "your gud06" << endl;
+						curr->prereqs->add_prereq(prereq_node); // TODO: SEGFAULT HERE
 					}
 				}
 			}
-			PrereqNode* prereq_node = new PrereqNode(prereq);
-			curr->prereqs->add_prereq(prereq_node);
+
 		}
 	}
 
@@ -88,5 +95,5 @@ int main(int argc, char ** argv){
 		cout << "Actual Course: " << graph->graph[i]->course->course_name << " // It's prereqs: ";
 		graph->graph[i]->prereqs->print_prereqs();
 	}
-	return 0;
+	exit(0);
 }
