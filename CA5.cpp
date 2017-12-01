@@ -30,7 +30,7 @@ int main(int argc, char ** argv){
 		} else if (lineVect[0] == "CREDIT"){
 				//Credit * cred = new Credit(lineVect[1], atoi(lineVect[2].c_str()));
 				//we need to create credit class with name & num_credits
-				//we also need to have some sort of array or vector of num_credits
+				//we also need to have some sort of array or vector of credits
 				//so that later on we can keep track of how many weve taken
 				//probably just subtract from num_credits each time they take
 				//and make sure all the num_credits are 0 after finishing
@@ -70,7 +70,7 @@ int main(int argc, char ** argv){
 					curr = graph->graph[i];
 				}
 				for(int j=3; j<lineVect.size(); j++){
-					if(graph->graph[i]->course->course_name == lineVect[j]){ // to find the prereq, not sure how to know how many on the line
+					if(graph->graph[i]->course->course_name == lineVect[j]){ // to find the prereq
 						prereq = graph->graph[i];
 					}
 				}
@@ -79,6 +79,7 @@ int main(int argc, char ** argv){
 			curr->prereqs->add_prereq(prereq_node);
 		}
 	}
+
 	int counter = 0;
 	for(unsigned int i = 0; i < graph->graph.size(); i++){
 		cout << "THIS IS THE " << counter << " COURSE." << endl;
