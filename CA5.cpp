@@ -52,5 +52,25 @@ int main(int argc, char ** argv){
 	for (unsigned int i = 0; i < graph->graph.size(); i++) {
 		std::cout << graph->graph[i]->course->course_name << endl;
 	}
+
+
+	Course_Node * curr;
+	Course_Node * prereq; 
+	while(getline(require, line)){
+		if(lineVect[0] == "COURSE"){
+			for(int i = 0; i<graph->graph.size(); i++){
+				if(graph->graph[i]->course->name == lineVect[1]){ // finding course we're on
+					curr = graph->graph[i];
+				}
+				for(int j=0; j<lineVect.size(); j++)
+					if(graph->graph[i]->course->name == lineVect[j]){ // to find the prereq, not sure how to know how many on the line
+						prereq = graph->graph[i];
+					} 
+			}
+			curr->prereqs->add_prereq(prereq); 
+			
+
+		}
+	}
 	exit (0);
 }
