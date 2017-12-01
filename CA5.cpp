@@ -16,7 +16,7 @@ int main(int argc, char ** argv){
 	require.open(argv[1]); // requirements file
 	if(!require){
 		cout << "Unable to read the first file" << endl;
-		exit(0);
+		//exit(0);
 	}
 	while(getline(require, line)){
 		//store line into vector lineVect
@@ -28,7 +28,12 @@ int main(int argc, char ** argv){
 		if(lineVect[0] == "TOTAL"){
 			total = atoi(lineVect[1].c_str());
 		} else if (lineVect[0] == "CREDIT"){
-
+				//Credit * cred = new Credit(lineVect[1], atoi(lineVect[2].c_str()));
+				//we need to create credit class with name & num_credits
+				//we also need to have some sort of array or vector of num_credits
+				//so that later on we can keep track of how many weve taken
+				//probably just subtract from num_credits each time they take
+				//and make sure all the num_credits are 0 after finishing
 		} else if(lineVect[0] == "COURSE"){
 			string course = lineVect[1];
 			//retrieve type of class
@@ -42,7 +47,7 @@ int main(int argc, char ** argv){
 
 		} else {
 			cout << "Bad file." << endl;
-			exit(0);
+			//exit(0);
 		}
 	}
 	//now to load the prereqs
@@ -52,25 +57,33 @@ int main(int argc, char ** argv){
 	for (unsigned int i = 0; i < graph->graph.size(); i++) {
 		std::cout << graph->graph[i]->course->course_name << endl;
 	}
-
-
 	Course_Node * curr;
-	Course_Node * prereq; 
+	Course_Node * prereq;
 	while(getline(require, line)){
+		stringstream ss(line);
+		istream_iterator<string> begin(ss);
+		istream_iterator<string> end;
+		vector<string> lineVect(begin, end);
 		if(lineVect[0] == "COURSE"){
 			for(int i = 0; i<graph->graph.size(); i++){
-				if(graph->graph[i]->course->name == lineVect[1]){ // finding course we're on
+				if(graph->graph[i]->course->course_name == lineVect[1]){ // finding course we're on
 					curr = graph->graph[i];
 				}
-				for(int j=0; j<lineVect.size(); j++)
-					if(graph->graph[i]->course->name == lineVect[j]){ // to find the prereq, not sure how to know how many on the line
+				for(int j=3; j<lineVect.size(); j++){
+					if(graph->graph[i]->course->course_name == lineVect[j]){ // to find the prereq, not sure how to know how many on the line
 						prereq = graph->graph[i];
-					} 
+					}
+				}
 			}
-			curr->prereqs->add_prereq(prereq); 
-			
-
+			PrereqNode* prereq_node = new PrereqNode(prereq);
+			curr->prereqs->add_prereq(prereq_node);
 		}
 	}
-	exit (0);
+	int counter = 0;
+	for(unsigned int i = 0; i < graph->graph.size(); i++){
+		cout << "THIS IS THE " << counter << " COURSE." << endl;
+		cout << "Actual Course: " << graph->graph[i]->course->course_name << " // It's prereqs: ";
+		graph->graph[i]->prereqs->print_prereqs();
+	}
+	return 0;
 }

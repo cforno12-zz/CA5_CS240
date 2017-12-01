@@ -12,5 +12,6 @@ public:
     PrereqNode* head;
     PrereqLL();
     void add_prereq(PrereqNode* pn);
+	void print_prereqs();
 };
 #endif

@@ -18,4 +18,16 @@ void PrereqLL::add_prereq(PrereqNode* pn){
     }
 }
 
-
+void PrereqLL::print_prereqs(){
+    if(!head){
+        if(!head->next){
+            cout << head->data->course->course_name << endl;
+        } else {
+            PrereqNode* curr = head;
+            while(curr){
+                cout << curr->data->course->course_name << endl;
+                curr = curr->next;
+            }
+        }
+    }
+}
