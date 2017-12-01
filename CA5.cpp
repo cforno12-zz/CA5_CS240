@@ -7,8 +7,6 @@
 #include "Req_graph.h"
 using namespace std;
 
-void total();
-
 int main(int argc, char ** argv){
 	Req_graph* graph = new Req_graph();
 	fstream require, offering;
@@ -20,10 +18,7 @@ int main(int argc, char ** argv){
 		cout << "Unable to read the first file" << endl;
 		exit(0);
 	}
-
-	while(!require.eof()){
-		getline(require, line);
-
+	while(getline(require, line)){
 		//store line into vector lineVect
 		stringstream ss(line);
 		istream_iterator<string> begin(ss);
@@ -35,18 +30,13 @@ int main(int argc, char ** argv){
 		} else if (lineVect[0] == "CREDIT"){
 
 		} else if(lineVect[0] == "COURSE"){
-			//retrieve course
 			string course = lineVect[1];
-
 			//retrieve type of class
 			char type = *lineVect[2].c_str();
-			Course* curr_course = new Course(course, type, 'A');
+			cout << type << endl;
+			Course* curr_course = new Course(course, type);
 			Course_Node* curr_course_node = new Course_Node(curr_course);
-			//check if course has prereqs
-			for(int i = 3; i < lineVect.size(); i++){
-					PrereqNode* prereq_node = new PrereqNode(curr_course_node);
-					curr_course_node->prereqs->add_prereq(prereq_node);
-			}
+			graph->add_course(curr_course_node);
 
 		} else if(lineVect[0] == "CHOOSE"){
 
@@ -54,13 +44,13 @@ int main(int argc, char ** argv){
 			cout << "Bad file." << endl;
 			exit(0);
 		}
-
 	}
-
+	//now to load the prereqs
+	require.clear();
+	require.seekg(0, ios::beg);
+	//these two lines reset the pointer of the file to the beginning
+	for (unsigned int i = 0; i < graph->graph.size(); i++) {
+		std::cout << graph->graph[i]->course->course_name << endl;
+	}
 	exit (0);
-}
-
-
-void total(){
-
 }
