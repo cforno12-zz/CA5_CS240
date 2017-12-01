@@ -12,3 +12,8 @@ Course::Course(string c, char t, char o, string cred){
     offer = o;
     cred = cred;
 }
+
+Course::Course(string c, char t){
+    course_name = c;
+    type = t;
+}

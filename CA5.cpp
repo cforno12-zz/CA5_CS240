@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <iterator>
 #include "Req_graph.h"
 using namespace std;
 
@@ -35,10 +36,10 @@ int main(int argc, char ** argv){
 				//probably just subtract from num_credits each time they take
 				//and make sure all the num_credits are 0 after finishing
 		} else if(lineVect[0] == "COURSE"){
-			string course = lineVect[1];
+      string course = lineVect[1];
 			//retrieve type of class
 			char type = *lineVect[2].c_str();
-			cout << type << endl;
+      cout << type << endl;
 			Course* curr_course = new Course(course, type);
 			Course_Node* curr_course_node = new Course_Node(curr_course);
 			graph->add_course(curr_course_node);
@@ -57,6 +58,7 @@ int main(int argc, char ** argv){
 	for (unsigned int i = 0; i < graph->graph.size(); i++) {
 		std::cout << graph->graph[i]->course->course_name << endl;
 	}
+
 	Course_Node * curr;
 	Course_Node * prereq;
 	while(getline(require, line)){
@@ -65,12 +67,12 @@ int main(int argc, char ** argv){
 		istream_iterator<string> end;
 		vector<string> lineVect(begin, end);
 		if(lineVect[0] == "COURSE"){
-			for(int i = 0; i<graph->graph.size(); i++){
+			for(unsigned int i = 0; i<graph->graph.size(); i++){
 				if(graph->graph[i]->course->course_name == lineVect[1]){ // finding course we're on
 					curr = graph->graph[i];
 				}
-				for(int j=3; j<lineVect.size(); j++){
-					if(graph->graph[i]->course->course_name == lineVect[j]){ // to find the prereq
+				for(unsigned int j=3; j<lineVect.size(); j++){
+					if(graph->graph[i]->course->course_name == lineVect[j]){ // to find the prereq, not sure how to know how many on the line
 						prereq = graph->graph[i];
 					}
 				}
