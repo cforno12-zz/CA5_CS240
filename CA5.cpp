@@ -66,22 +66,18 @@ int main(int argc, char ** argv){
 		istream_iterator<string> begin(ss);
 		istream_iterator<string> end;
 		vector<string> lineVect(begin, end);
-		cout << "you gud01" << endl;
 		if(lineVect[0] == "COURSE"){
 			for(unsigned int i = 0; i<graph->graph.size(); i++){
-				cout << "you gud02" << endl;
 				if(graph->graph[i]->course->course_name == lineVect[1]){ // finding course we're on
-					cout << "you gud03" << endl;
 					curr = graph->graph[i];
 				}
 				for(unsigned int j=3; j<lineVect.size(); j++){
-					cout << "you gud04" << endl;
 					if(graph->graph[i]->course->course_name == lineVect[j]){ // to find the prereq, not sure how to know how many on the line
-						cout << "you gud05" << endl;
 						prereq = graph->graph[i];
+            cout << graph->graph[i]->course->course_name << endl;
 						PrereqNode* prereq_node = new PrereqNode(prereq);
-						cout << "your gud06" << endl;
 						curr->prereqs->add_prereq(prereq_node); // TODO: SEGFAULT HERE
+
 					}
 				}
 			}
