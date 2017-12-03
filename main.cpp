@@ -1,11 +1,3 @@
-//
-//  main.cpp
-//  Program3
-//
-//  Created by Adam Berelowitz on 11/29/16.
-//  Copyright © 2016 Adam Berelowitz. All rights reserved.
-//
-
 #include <iostream>
 #include "AdjacencyList.h"
 
@@ -16,8 +8,8 @@ int main(int argc, const char * argv[]) {
   	if(argc != 4)
   		return 1;
 	
-	string offerings = argv[1];
-	string requirements = argv[2];
+	string offerings = argv[2];
+	string requirements = argv[1];
 	string schedule = argv[3];
 	
 	AdjacencyList temp1;
