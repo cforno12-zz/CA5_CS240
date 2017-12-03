@@ -1,19 +1,24 @@
-#include <iostream>
-#include <stdlib.h>
-#include <string.h>
-
 #include "Course.h"
+#include <string>
+
+#include <istream>
+#include <sstream>
 
 using namespace std;
 
-Course::Course(string c, char t, char o, string cred){
-    course_name = c;
-    type = t;
-    offer = o;
-    cred = cred;
+Course::Course(){
+	has_taken_class = false;
 }
 
-Course::Course(string c, char t){
-    course_name = c;
-    type = t;
+
+std::ostream &operator<<(std::ostream &out, const Course &in){
+	
+	out << in.course_name << " " << in.num_credits << " " << in.when_offered << " " << in.requirements_type << " " << in.course_type << " ";
+	for(int i = 0; i < in.total_prerequisites; i++)
+		out << in.prerequisites[i] << " ";
+	out << endl;
+	
+	return out;
+		
 }
+

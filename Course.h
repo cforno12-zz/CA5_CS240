@@ -1,20 +1,30 @@
-#ifndef COURSE_H
-#define COURSE_H
+#ifndef Course_h
+#define Course_h
 
-#include <iostream>
-#include <stdlib.h>
-#include <string.h>
+#include <stdio.h>
+#include <string>
 
 using namespace std;
 
 class Course {
+	
+	
 public:
-    Course(string c, char t, char o, string cred);
-	Course(string c, char t);
-    string course_name;
-	char offer;
-    char type;
-    string cred;
+	Course();
+	
+	string course_name;
+	int num_credits;
+	string when_offered;
+	string course_type;
+	string requirements_type;
+	string * prerequisites;
+	long total_prerequisites;
+	bool has_taken_class;
+	
+	friend ostream &operator<<(ostream &out, const Course &in);
+
 };
 
-#endif
+
+#endif /* Course_h */
+
