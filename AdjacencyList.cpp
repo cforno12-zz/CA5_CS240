@@ -298,7 +298,7 @@ vector<string> AdjacencyList::split(string input){ //***************************
 	bool in_word = false;
 	int total_words = 0;
 	
-	for(int i = 0; i < input.size(); i++){
+	for(unsigned int i = 0; i < input.size(); i++){
 		if(input[i] != 32 && !in_word){
 			in_word = true;
 			total_words++;
