@@ -18,19 +18,19 @@ AdjacencyList::AdjacencyList(){
 	total_choose_course_indexes = 0;
 }
 
-void AdjacencyList::test_input(std::string offerings, std::string requirements, std::string schedule){
-	std::string build_return = build_list(offerings, requirements, schedule);
-	if(build_return.find("BAD.") != std::string::npos){
-		std::cout << build_return << std::endl;
+void AdjacencyList::test_input(string offerings, string requirements, string schedule){
+	string build_return = build_list(offerings, requirements, schedule);
+	if(build_return.find("BAD.") != string::npos){
+		cout << build_return << endl;
 		return;
 	}
-	std::string is_schedule_valid_return = is_schedule_valid();
-	std::cout << is_schedule_valid_return << std::endl;
+	string is_schedule_valid_return = is_schedule_valid();
+	cout << is_schedule_valid_return << endl;
 }
 
-std::string AdjacencyList::build_list(std::string offerings, std::string requirements, std::string schedule){
-	std::string fill_return = fill_list(offerings, requirements, schedule);
-	if(fill_return.find("BAD.") != std::string::npos)
+string AdjacencyList::build_list(string offerings, string requirements, string schedule){
+	string fill_return = fill_list(offerings, requirements, schedule);
+	if(fill_return.find("BAD.") != string::npos)
 		return fill_return;
 	for(int i = 0; i < total_available_courses; i++)
 		if(is_cs_course_offered_and_not_in_reqs(all_courses[i].course_name))
@@ -83,16 +83,16 @@ std::string AdjacencyList::build_list(std::string offerings, std::string require
 			}
 		}
 	}
-	std::ifstream input_stream;
+	ifstream input_stream;
 	input_stream.open(schedule.c_str());
-	std::string c_line;
+	string c_line;
 	if(input_stream.is_open()){
 		int total_sems_added = 0;
-		while(std::getline(input_stream, c_line)){
-			std::vector<std::string> vector = split(c_line);
+		while(getline(input_stream, c_line)){
+			vector<string> vector = split(c_line);
 			if(vector.size() != 5){
-				std::string bad_return = "BAD. Semester ";
-				bad_return.append(std::to_string(total_sems_added + 1));
+				string bad_return = "BAD. Semester ";
+				bad_return.append(to_string(total_sems_added + 1));
 				bad_return.append(" does not have 4 classes.");
 				return bad_return;
 			}
@@ -116,17 +116,17 @@ std::string AdjacencyList::build_list(std::string offerings, std::string require
 	return "GOOD.";
 }
 
-std::string AdjacencyList::fill_list(std::string offerings, std::string requirements, std::string schedule){
+string AdjacencyList::fill_list(string offerings, string requirements, string schedule){
 	int total_lines = 0;
 	int current_line_num = 0;
 	
-	std::ifstream input_stream;
+	ifstream input_stream;
 	//OFFERINGS
 	input_stream.open(offerings.c_str());
-	std::string c_line;
+	string c_line;
 	if(input_stream.is_open()){
-		while(std::getline(input_stream, c_line)){
-			std::vector<std::string> vector = split(c_line);
+		while(getline(input_stream, c_line)){
+			vector<string> vector = split(c_line);
 			if(vector.size() < 3)
 				return "BAD. Course offering format is incorrect.";
 			else if(is_course_name_valid(vector[0]))
@@ -134,15 +134,15 @@ std::string AdjacencyList::fill_list(std::string offerings, std::string requirem
 		}
 		total_available_courses = total_lines;
 		input_stream.clear();
-		input_stream.seekg(0, std::ios::beg);
+		input_stream.seekg(0, ios::beg);
 		all_courses = new Course[total_lines];
-		while(std::getline(input_stream, c_line, '\n')){
-			std::vector<std::string> vector = split(c_line);
+		while(getline(input_stream, c_line, '\n')){
+			vector<string> vector = split(c_line);
 			if(vector.size() < 3 || !is_course_name_valid(vector[0]))
 				continue;
 			Course * c_course = new Course;
 			c_course -> course_name = vector[0];
-			c_course -> num_credits = std::atoi(vector[1].c_str());
+			c_course -> num_credits = atoi(vector[1].c_str());
 			c_course -> when_offered = vector[2];
 			c_course -> course_type = "X"; //************************************just as a filler?
 			c_course -> requirements_type = "N"; //****************************************just a filler?
@@ -157,11 +157,11 @@ std::string AdjacencyList::fill_list(std::string offerings, std::string requirem
 	total_lines = 0;
 	current_line_num = 0;
 	int choose_indexes_added = 0;
-	std::ifstream t_input_stream;
+	ifstream t_input_stream;
 	t_input_stream.open(requirements);
 	if(input_stream.is_open()){
-		while(std::getline(t_input_stream, c_line)){
-			std::vector<std::string> vector = split(c_line);
+		while(getline(t_input_stream, c_line)){
+			vector<string> vector = split(c_line);
 			if(vector.size() > 0 && vector[0] == "COURSE")
 				total_lines++;
 			if(vector.size() > 0 && vector[0] == "CHOOSE")
@@ -170,20 +170,20 @@ std::string AdjacencyList::fill_list(std::string offerings, std::string requirem
 		if(total_choose_course_indexes > 0)
 			choose_courses = new Choose[total_choose_course_indexes];
 		t_input_stream.clear();
-		t_input_stream.seekg(0, std::ios::beg);
-		while(std::getline(t_input_stream, c_line, '\n')){
-			std::vector<std::string> vector = split(c_line);
+		t_input_stream.seekg(0, ios::beg);
+		while(getline(t_input_stream, c_line, '\n')){
+			vector<string> vector = split(c_line);
 			if(vector[0] == "TOTAL")
-				total_required_credits = std::atoi(vector[1].c_str());
+				total_required_credits = atoi(vector[1].c_str());
 			else if(vector[0] == "CREDIT"){
 				if(vector.size() != 3)
 					return "BAD. Required class format incorrect.";
 				if(vector[1] == "C")
-					total_c_credits_required = std::atoi(vector[2].c_str());
+					total_c_credits_required = atoi(vector[2].c_str());
 				else if(vector[1] == "H")
-					total_h_credits_required = std::atoi(vector[2].c_str());
+					total_h_credits_required = atoi(vector[2].c_str());
 				else if(vector[1] == "F")
-					total_f_credits_required = std::atoi(vector[2].c_str());
+					total_f_credits_required = atoi(vector[2].c_str());
 			}
 			else if(vector[0] == ("COURSE")){
 				int index_course = get_course_index_for_name(vector[1]);
@@ -197,7 +197,7 @@ std::string AdjacencyList::fill_list(std::string offerings, std::string requirem
 				all_courses[index_course].total_prerequisites = vector.size() - 3;
 				long size = vector.size() - 3;
 				if(size > 0)
-					all_courses[index_course].prerequisites = new std::string[size];
+					all_courses[index_course].prerequisites = new string[size];
 				else
 					all_courses[index_course].prerequisites = nullptr;
 				for(int i = 3; i < (all_courses[index_course].total_prerequisites + 3); i++)
@@ -205,7 +205,7 @@ std::string AdjacencyList::fill_list(std::string offerings, std::string requirem
 			}
 			else if(vector[0] == "CHOOSE"){
 				Choose * choose = new Choose();
-				choose -> all_options = new std::string[vector.size() - 2];
+				choose -> all_options = new string[vector.size() - 2];
 				choose -> total_options = (int) vector.size() - 2;
 				for(int i = 0; i < choose -> total_options; i++)
 					choose -> all_options[i] = vector[i + 2];
@@ -231,7 +231,7 @@ void AdjacencyList::sort_schedule(){
 	}
 }
 
-std::string AdjacencyList::modify_semester_name_for_sorting(std::string name){
+string AdjacencyList::modify_semester_name_for_sorting(string name){
 	if(name.size() == 0)
 		return name;
 	char first = name[0];
@@ -252,7 +252,7 @@ bool AdjacencyList::all_mandatory_and_required_classes_taken(){
 }
 
 
-bool AdjacencyList::is_cs_course_offered_and_not_in_reqs(std::string course_name){
+bool AdjacencyList::is_cs_course_offered_and_not_in_reqs(string course_name){
 	if(course_name[0] != 'C' || course_name[1] != 'S')
 		return false;
 	for(int i = 0; i < total_available_courses; i++)
@@ -261,7 +261,7 @@ bool AdjacencyList::is_cs_course_offered_and_not_in_reqs(std::string course_name
 	return get_course_index_for_name(course_name) != -1;
 }
 
-AdjNode * AdjacencyList::get_node_for_name(std::string course_name){ //*************************************where hash map will make it O(1)
+AdjNode * AdjacencyList::get_node_for_name(string course_name){ //*************************************where hash map will make it O(1)
 	for(int i = 0; i < total_required_classes; i++)
 		if(nodes[i].course.course_name == course_name)
 			return &nodes[i];
@@ -269,7 +269,7 @@ AdjNode * AdjacencyList::get_node_for_name(std::string course_name){ //*********
 }
 
 
-int AdjacencyList::get_course_index_for_name(std::string name){
+int AdjacencyList::get_course_index_for_name(string name){
 	for(int i = 0; i < total_available_courses; i++){
 		if(all_courses[i].course_name == name)
 			return i;
@@ -278,7 +278,7 @@ int AdjacencyList::get_course_index_for_name(std::string name){
 }
 
 
-bool AdjacencyList::is_course_name_valid(std::string input){
+bool AdjacencyList::is_course_name_valid(string input){
 	if(input.size() != 5)
 		return false;
 	int total_num = 0;
@@ -294,7 +294,7 @@ bool AdjacencyList::is_course_name_valid(std::string input){
 }
 
 
-std::vector<std::string> AdjacencyList::split(std::string input){ //*************************************finds total number of words, created vector of words
+vector<string> AdjacencyList::split(string input){ //*************************************finds total number of words, created vector of words
 	bool in_word = false;
 	int total_words = 0;
 	
@@ -307,29 +307,29 @@ std::vector<std::string> AdjacencyList::split(std::string input){ //************
 			in_word = false;
 	}
 	
-	std::string * attr = new std::string[total_words];
+	string * attr = new string[total_words];
 	
 	int i = 0;
-	std::stringstream ssin(input);
+	stringstream ssin(input);
 	while (ssin.good() && i < total_words){
 		ssin >> attr[i];
 		++i;
 	}
-	std::vector<std::string> vect (attr, attr + total_words);
+	vector<string> vect (attr, attr + total_words);
 	return vect;
 }
 
-bool AdjacencyList::is_course_available_in_registered_semester(std::string course_name, char semester){
+bool AdjacencyList::is_course_available_in_registered_semester(string course_name, char semester){
 	int index = get_course_index_for_name(course_name);
 	if(index == -1)
 		return false;
 	if(all_courses[index].when_offered.back() == 'E')
 		return true;
-	return all_courses[index].when_offered.find(semester) != std::string::npos;
+	return all_courses[index].when_offered.find(semester) != string::npos;
 }
 
 
-bool AdjacencyList::can_take_class(std::string course_name){
+bool AdjacencyList::can_take_class(string course_name){
 	if(!is_required_class(course_name))
 		return true;
 	for(int i = 0; i < total_required_classes; i++){
@@ -351,29 +351,29 @@ bool AdjacencyList::can_take_class(std::string course_name){
 	return false;
 }
 
-void AdjacencyList::mark_class_taken(std::string course_name){
+void AdjacencyList::mark_class_taken(string course_name){
 	for(int i = 0; i < total_available_courses; i++)
 		if(all_courses[i].course_name == course_name){
 			all_courses[i].has_taken_class = true;
 			total_credits_taken += all_courses[i].num_credits;
-			if(all_courses[i].requirements_type.find("C") != std::string::npos)
+			if(all_courses[i].requirements_type.find("C") != string::npos)
 				total_c_credits_taken += all_courses[i].num_credits;
-			else if(all_courses[i].requirements_type.find("H") != std::string::npos)
+			else if(all_courses[i].requirements_type.find("H") != string::npos)
 				total_h_credits_taken += all_courses[i].num_credits;
-			else if(all_courses[i].requirements_type.find("F") != std::string::npos)
+			else if(all_courses[i].requirements_type.find("F") != string::npos)
 				total_f_credits_taken += all_courses[i].num_credits;
 			
 		}
 }
 
-bool AdjacencyList::is_required_class(std::string course_name){
+bool AdjacencyList::is_required_class(string course_name){
 	int index = get_course_index_for_name(course_name);
 	if(index == -1)
 		return false;
 	return all_courses[index].course_type != "X";
 }
 
-bool AdjacencyList::has_taken_class(std::string course_name){
+bool AdjacencyList::has_taken_class(string course_name){
 	for(int i = 0; i < total_available_courses; i++)
 		if(all_courses[i].course_name == course_name)
 			return all_courses[i].has_taken_class;
@@ -381,7 +381,7 @@ bool AdjacencyList::has_taken_class(std::string course_name){
 }
 
 
-bool AdjacencyList::is_course_in_schedule(std::string course_name){
+bool AdjacencyList::is_course_in_schedule(string course_name){
 	for(int i = 0; i < 8; i++)
 		for(int j = 0; j < 4; j++)
 			if(semesters[i].courses[j] == course_name)
@@ -390,13 +390,13 @@ bool AdjacencyList::is_course_in_schedule(std::string course_name){
 }
 
 
-std::string AdjacencyList::is_schedule_valid(){
+string AdjacencyList::is_schedule_valid(){
 	for(int i = 0; i < 8; i++){
 		for(int j = 0; j < 4; j++){
 			if(can_take_class(semesters[i].courses[j]))
 				mark_class_taken(semesters[i].courses[j]);
 			else{
-				std::string reason = "BAD. ";
+				string reason = "BAD. ";
 				reason.append(semesters[i].courses[i]);
 				reason.append(" cannot be taken due to requirements.");
 				return reason;
@@ -406,7 +406,7 @@ std::string AdjacencyList::is_schedule_valid(){
 	for(int i = 0; i < 8; i++){
 		for(int j = 0; j < 4; j++){
 			if(!is_course_available_in_registered_semester(semesters[i].courses[j], semesters[i].semester_name.back())){
-				std::string bad_ret = "BAD. ";
+				string bad_ret = "BAD. ";
 				bad_ret.append(semesters[i].courses[j]);
 				bad_ret.append(" registered in semester it is not offered.");
 				return bad_ret;
