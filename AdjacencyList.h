@@ -93,7 +93,7 @@ public:
 	
 	void test_input(string offerings, string requirements, string schedule);
 	
-private:
+//private:
 	int total_available_courses;
 	int total_required_classes;
 	int total_choose_course_indexes;

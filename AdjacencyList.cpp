@@ -310,7 +310,7 @@ bool AdjacencyList::is_course_name_valid(string input){
 }
 
 
-vector<string> AdjacencyList::split(string input){ //*************************************finds total number of words, created vector of words
+vector<string> AdjacencyList::split(string input){ 
 	bool in_word = false;
 	int total_words = 0;
 	
