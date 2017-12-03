@@ -1,5 +1,5 @@
 #include "AdjacencyList.h"
-
+#include <unordered_map>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -119,10 +119,15 @@ string AdjacencyList::build_list(string offerings, string requirements, string s
 string AdjacencyList::fill_list(string offerings, string requirements, string schedule){
 	int total_lines = 0;
 	int current_line_num = 0;
+	int course_index = 0;
 	
 	ifstream input_stream;
 	//OFFERINGS
 	input_stream.open(offerings.c_str());
+
+	//HASH MAP ADDITION
+	unordered_map<string, int> hashMap;
+	
 	string c_line;
 	if(input_stream.is_open()){
 		while(getline(input_stream, c_line)){
@@ -140,14 +145,20 @@ string AdjacencyList::fill_list(string offerings, string requirements, string sc
 			vector<string> vector = split(c_line);
 			if(vector.size() < 3 || !is_course_name_valid(vector[0]))
 				continue;
+
 			Course * c_course = new Course;
 			c_course -> course_name = vector[0];
 			c_course -> num_credits = atoi(vector[1].c_str());
 			c_course -> when_offered = vector[2];
-			c_course -> course_type = "X"; //************************************just as a filler?
-			c_course -> requirements_type = "N"; //****************************************just a filler?
+			c_course -> course_type = "X"; 
+			c_course -> requirements_type = "N"; 
+
+			//HASH MAP ADDITION
+			hashMap.insert({ vector[0], course_index });
+			course_index++;
+
 			if(vector.size() > 3)
-				c_course -> requirements_type = vector[3]; //*********************************offerings doesnt have requirement type i think
+				c_course -> requirements_type = vector[3]; 
 			all_courses[current_line_num] = *c_course;
 			current_line_num++;
 		}
