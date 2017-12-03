@@ -124,9 +124,6 @@ string AdjacencyList::fill_list(string offerings, string requirements, string sc
 	ifstream input_stream;
 	//OFFERINGS
 	input_stream.open(offerings.c_str());
-
-	//HASH MAP ADDITION
-	unordered_map<string, int> hashMap;
 	
 	string c_line;
 	if(input_stream.is_open()){
@@ -272,7 +269,7 @@ bool AdjacencyList::is_cs_course_offered_and_not_in_reqs(string course_name){
 	return get_course_index_for_name(course_name) != -1;
 }
 
-AdjNode * AdjacencyList::get_node_for_name(string course_name){ //*************************************where hash map will make it O(1)
+AdjNode * AdjacencyList::get_node_for_name(string course_name){ 
 	for(int i = 0; i < total_required_classes; i++)
 		if(nodes[i].course.course_name == course_name)
 			return &nodes[i];
@@ -281,11 +278,19 @@ AdjNode * AdjacencyList::get_node_for_name(string course_name){ //**************
 
 
 int AdjacencyList::get_course_index_for_name(string name){
-	for(int i = 0; i < total_available_courses; i++){
+	unordered_map<string, int>::const_iterator hash_map_iterator = hashMap.find(name);
+
+	if(hash_map_iterator == hashMap.end()){
+		return -1;
+	} else {
+		return hash_map_iterator->second;
+	}
+
+	/*for(int i = 0; i < total_available_courses; i++){
 		if(all_courses[i].course_name == name)
 			return i;
 	}
-	return -1;
+	return -1;*/
 }
 
 

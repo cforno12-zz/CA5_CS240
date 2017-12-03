@@ -1,6 +1,7 @@
 #ifndef AdjacencyList_h
 #define AdjacencyList_h
 
+#include <unordered_map>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -113,6 +114,9 @@ private:
 	
 	
 	Semester semesters[8];
+
+	//HASH MAP ADDITION
+	unordered_map<string, int> hashMap;
 	
 	string build_list(string offerings, string requirements, string schedule);
 	string fill_list(string offerings, string requirements, string schedule);
