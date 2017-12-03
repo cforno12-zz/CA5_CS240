@@ -17,6 +17,7 @@ public:
 	string when_offered;
 	string course_type;
 	string requirements_type;
+	//char [] requirements_type = {'Z', 'Z', 'Z'}; // To seperate requirement types, Z is filler
 	string * prerequisites;
 	long total_prerequisites;
 	bool has_taken_class;

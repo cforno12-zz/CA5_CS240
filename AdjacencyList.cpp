@@ -152,7 +152,17 @@ string AdjacencyList::fill_list(string offerings, string requirements, string sc
 
 			//HASH MAP ADDITION
 			hashMap.insert({ vector[0], course_index });
+//cout << "Course: " << vector[0] << " Index: " << course_index << endl;
 			course_index++;
+
+			/*if(vector.size>3){
+				if (strlen(vector[3]) != 1){
+					char[] type = vector[3].c_str();
+				}
+				for(int i = 0; i < strlen(type); i++){
+					requirements_type[i] = type[i];
+				}
+			}*/
 
 			if(vector.size() > 3)
 				c_course -> requirements_type = vector[3]; 
@@ -204,8 +214,9 @@ string AdjacencyList::fill_list(string offerings, string requirements, string sc
 				all_courses[index_course].course_type = vector[2];
 				all_courses[index_course].total_prerequisites = vector.size() - 3;
 				long size = vector.size() - 3;
-				if(size > 0)
+				if(size > 0){
 					all_courses[index_course].prerequisites = new string[size];
+				}
 				else
 					all_courses[index_course].prerequisites = nullptr;
 				for(int i = 3; i < (all_courses[index_course].total_prerequisites + 3); i++)
@@ -281,8 +292,10 @@ int AdjacencyList::get_course_index_for_name(string name){
 	unordered_map<string, int>::const_iterator hash_map_iterator = hashMap.find(name);
 
 	if(hash_map_iterator == hashMap.end()){
+//cout << "Returns : " << hash_map_iterator->second << endl;
 		return -1;
 	} else {
+//cout << "Returns : " << hash_map_iterator->second << endl;
 		return hash_map_iterator->second;
 	}
 
@@ -350,9 +363,9 @@ bool AdjacencyList::can_take_class(string course_name){
 		return true;
 	for(int i = 0; i < total_required_classes; i++){
 		if(nodes[i].course.course_name == course_name){
-			if(!nodes[i].next)
+			if(!nodes[i].next){
 				return true;
-			else{
+			} else{
 				int total_passed = 0;
 				AdjNode * temp = nodes[i].next;
 				while(temp != NULL){
@@ -374,9 +387,9 @@ void AdjacencyList::mark_class_taken(string course_name){
 			total_credits_taken += all_courses[i].num_credits;
 			if(all_courses[i].requirements_type.find("C") != string::npos)
 				total_c_credits_taken += all_courses[i].num_credits;
-			else if(all_courses[i].requirements_type.find("H") != string::npos)
+			if(all_courses[i].requirements_type.find("H") != string::npos)
 				total_h_credits_taken += all_courses[i].num_credits;
-			else if(all_courses[i].requirements_type.find("F") != string::npos)
+			if(all_courses[i].requirements_type.find("F") != string::npos)
 				total_f_credits_taken += all_courses[i].num_credits;
 			
 		}
@@ -409,11 +422,22 @@ bool AdjacencyList::is_course_in_schedule(string course_name){
 string AdjacencyList::is_schedule_valid(){
 	for(int i = 0; i < 8; i++){
 		for(int j = 0; j < 4; j++){
+			if(get_course_index_for_name(semesters[i].courses[j]) == -1){
+				string reason = "BAD. ";
+				reason.append(semesters[i].courses[j]);
+				reason.append(" does not exist.");
+				return reason;
+			}
+		}
+	}
+
+	for(int i = 0; i < 8; i++){
+		for(int j = 0; j < 4; j++){
 			if(can_take_class(semesters[i].courses[j]))
 				mark_class_taken(semesters[i].courses[j]);
 			else{
 				string reason = "BAD. ";
-				reason.append(semesters[i].courses[i]);
+				reason.append(semesters[i].courses[j]);
 				reason.append(" cannot be taken due to requirements.");
 				return reason;
 			}
@@ -449,12 +473,18 @@ string AdjacencyList::is_schedule_valid(){
 		return "BAD. Not all mandatory or required classes have been taken.";
 	if(total_credits_taken < total_required_credits)
 		return "BAD. Not enough credits taken.";
-	if(total_c_credits_taken < total_c_credits_required)
+	if(total_c_credits_taken < total_c_credits_required){
+		cout << "C Credits: " << total_c_credits_taken << endl;
 		return "BAD. Not enough C credits taken.";
-	if(total_h_credits_taken < total_h_credits_required)
+	}
+	if(total_h_credits_taken < total_h_credits_required){
+		cout << "h Credits: " << total_h_credits_taken << endl;
 		return "BAD. Not enough H credits taken.";
-	if(total_h_credits_taken < total_f_credits_required)
+	}
+	if(total_f_credits_taken < total_f_credits_required){
+		cout << "f Credits: " << total_f_credits_taken << endl;
 		return "BAD. Not enough F credits taken.";
+	}
 	
 	return "GOOD.";
 }

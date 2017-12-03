@@ -5,7 +5,7 @@ CXXFLAGS:= -c -Wall -I=.
 
 #---------------------------------
 
-all: link
+all: link test
 
 link: compile $(SOURCE) $(OBJECT)
 	g++ -o schedule.exe $(OBJECT)
@@ -21,3 +21,6 @@ clean:
 compress: clean
 	tar -cvvf CA5.tar *.* Makefile
 	gzip CA5.tar
+
+test: schedule.exe requirements.txt course_offerings.txt planned_schedule.txt
+	./schedule.exe requirements.txt course_offerings.txt planned_schedule.txt
