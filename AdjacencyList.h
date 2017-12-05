@@ -112,31 +112,24 @@ class AdjacencyList {
 
 public:
 	AdjacencyList();
-	
-	void test_input(string offerings, string requirements, string schedule);
-	
-//private:
-	int total_available_courses;
-	int total_required_classes;
-	int total_choose_course_indexes;
-	
-	int total_required_credits;
-	int total_c_credits_required;
-	int total_h_credits_required;
-	int total_f_credits_required;
-	
-	int total_credits_taken;
-	/*int total_c_credits_taken;
-	int total_h_credits_taken;
-	int total_f_credits_taken;*/
 
-	
-	vector<Credit*> credits;	
+	void test_input(string offerings, string requirements, string schedule);
+
+//private:
+	int available_courses;
+	int required_classes;
+	int choose_course_indexes;
+
+	int required_credits;
+
+	int credits_taken;
+
+	vector<Credit*> credits;
 	AdjNode * nodes;
 	Course * all_courses;
 	Choose * choose_courses;
-	
-	
+
+
 	Semester semesters[8];
 
 	//HASH MAP ADDITION
