@@ -28,6 +28,28 @@ struct Choose {
 	
 };
 
+struct Credit {
+	Credit(){
+		credit_type = '0';
+		num_credits_to_take = 0;
+		num_credits_taken = 0;
+	}
+
+	Credit(char type, int toTake){
+		credit_type = type;
+		num_credits_to_take = toTake;
+		num_credits_taken = 0;
+	}
+
+	char credit_type;
+	int num_credits_to_take;
+	int num_credits_taken;
+
+	~Credit(){
+		
+	}
+};
+
 struct Semester {
 	
 	Semester(){
@@ -104,10 +126,12 @@ public:
 	int total_f_credits_required;
 	
 	int total_credits_taken;
-	int total_c_credits_taken;
+	/*int total_c_credits_taken;
 	int total_h_credits_taken;
-	int total_f_credits_taken;
+	int total_f_credits_taken;*/
+
 	
+	vector<Credit*> credits;	
 	AdjNode * nodes;
 	Course * all_courses;
 	Choose * choose_courses;

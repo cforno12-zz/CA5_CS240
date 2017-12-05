@@ -11,9 +11,9 @@ AdjacencyList::AdjacencyList(){
     total_required_classes = 0;
     total_available_courses = 0;
     total_required_credits = 0;
-    total_c_credits_taken = 0;
+    /*total_c_credits_taken = 0;
     total_h_credits_taken = 0;
-    total_f_credits_taken = 0;
+    total_f_credits_taken = 0;*/
     total_credits_taken = 0;
     total_choose_course_indexes = 0;
 }
@@ -195,12 +195,21 @@ string AdjacencyList::fill_list(string offerings, string requirements, string sc
             else if(vector[0] == "CREDIT"){
                 if(vector.size() != 3)
                     return "Bad plan. Here's why: Required class format incorrect.";
-                if(vector[1] == "C")
+				
+				/*int strLen = vector[1].length();
+
+				char * creditArray = vector[1].c_str();*/
+
+				/*for(int i = 0; i < strLen; i++){*/
+				credits.push_back(new Credit(*vector[1].c_str(), atoi(vector[2].c_str())));
+				/*}*/
+
+                /*if(vector[1] == "C")
                     total_c_credits_required = atoi(vector[2].c_str());
                 else if(vector[1] == "H")
                     total_h_credits_required = atoi(vector[2].c_str());
                 else if(vector[1] == "F")
-                    total_f_credits_required = atoi(vector[2].c_str());
+                    total_f_credits_required = atoi(vector[2].c_str());*/
             }
             else if(vector[0] == ("COURSE")){
                 int index_course = get_course_index_for_name(vector[1]);
@@ -384,12 +393,25 @@ void AdjacencyList::mark_class_taken(string course_name){
         if(all_courses[i].course_name == course_name){
             all_courses[i].has_taken_class = true;
             total_credits_taken += all_courses[i].num_credits;
-            if(all_courses[i].requirements_type.find("C") != string::npos)
+
+			int strLen = all_courses[i].requirements_type.length();
+
+			const char * creditArray = all_courses[i].requirements_type.c_str();
+
+			for(int j = 0; j < strLen; j++){
+				for(unsigned int k = 0; k < credits.size(); k++){
+					if(creditArray[j] == credits[k]->credit_type){	
+						credits[k]->num_credits_taken += all_courses[i].num_credits;
+					}
+				} 
+			}
+
+            /*if(all_courses[i].requirements_type.find("C") != string::npos)
                 total_c_credits_taken += all_courses[i].num_credits;
             if(all_courses[i].requirements_type.find("H") != string::npos)
                 total_h_credits_taken += all_courses[i].num_credits;
             if(all_courses[i].requirements_type.find("F") != string::npos)
-                total_f_credits_taken += all_courses[i].num_credits;
+                total_f_credits_taken += all_courses[i].num_credits;*/
         }
 }
 
@@ -463,13 +485,29 @@ string AdjacencyList::is_schedule_valid(){
             }
         }
     }
-    if(total_taken < total_choose_course_indexes)
+
+    if(total_taken < total_choose_course_indexes){
         return "Bad plan. Here's why: Not all choose classes have been taken.";
-    if(!all_mandatory_and_required_classes_taken())
+	}
+    if(!all_mandatory_and_required_classes_taken()){
         return "Bad plan. Here's why: Not all mandatory or required classes have been taken.";
-    if(total_credits_taken < total_required_credits)
+	}
+    if(total_credits_taken < total_required_credits){
         return "Bad plan. Here's why: Not enough credits taken.";
-    if(total_c_credits_taken < total_c_credits_required){
+	}
+
+	for(unsigned int i = 0; i < credits.size(); i++){
+		if(credits[i]->num_credits_taken < credits[i]->num_credits_to_take){
+     	  	cout << credits[i]->credit_type << " Credits: " << credits[i]->num_credits_taken << endl;
+			string ret = "Bad plan. Here's why: Not enough ";
+			string gross(1 , credits[i]->credit_type);
+			ret.append(gross);
+			ret.append("credits taken.");
+       		return ret;
+		}
+	}
+
+    /*if(total_c_credits_taken < total_c_credits_required){
         cout << "C Credits: " << total_c_credits_taken << endl;
         return "Bad plan. Here's why: Not enough C credits taken.";
     }
@@ -480,6 +518,6 @@ string AdjacencyList::is_schedule_valid(){
     if(total_f_credits_taken < total_f_credits_required){
         cout << "f Credits: " << total_f_credits_taken << endl;
         return "Bad plan. Here's why: Not enough F credits taken.";
-    }
+    }*/
     return "Good plan. Get to work.";
 }
