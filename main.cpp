@@ -13,7 +13,7 @@ int main(int argc, const char * argv[]) {
 	string schedule = argv[3];
 	
 	AdjacencyList temp1;
-	temp1.test_input(offerings, requirements, schedule);
+	temp1.build_list(offerings, requirements, schedule);
 	
 	//std::cout << (temp1.is_schedule_valid() ? "Good" : "Bad" ) << std::endl;
 	

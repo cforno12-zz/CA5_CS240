@@ -113,7 +113,7 @@ class AdjacencyList {
 public:
 	AdjacencyList();
 
-	void test_input(string offerings, string requirements, string schedule);
+	//void test_input(string offerings, string requirements, string schedule);
 
 //private:
 	int available_courses;
@@ -135,9 +135,9 @@ public:
 	//HASH MAP ADDITION
 	unordered_map<string, int> hashMap;
 	
-	string build_list(string offerings, string requirements, string schedule);
-	string fill_list(string offerings, string requirements, string schedule);
-	string is_schedule_valid();
+	void build_list(string offerings, string requirements, string schedule);
+	void fill_list(string offerings, string requirements, string schedule);
+	void is_schedule_valid();
 	
 	void sort_schedule();
 	void mark_class_taken(string course_name);
