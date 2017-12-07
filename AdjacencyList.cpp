@@ -518,4 +518,3 @@ string AdjacencyList::is_schedule_valid(){
       }*/
     return "Good plan. Get to work.";
 }
-`
