@@ -19,7 +19,7 @@ clean:
 	rm -f *.o schedule.exe
 
 compress: clean
-	tar -cvvf CA5.tar *.* Makefile
+	tar -cvvf CA5.tar *.* Makefile ./test_cases
 	gzip CA5.tar
 
 test: schedule.exe
