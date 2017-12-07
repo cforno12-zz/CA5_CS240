@@ -113,7 +113,7 @@ class AdjacencyList {
 public:
 	AdjacencyList();
 
-	//void test_input(string offerings, string requirements, string schedule);
+	void test_input(string offerings, string requirements, string schedule);
 
 //private:
 	int available_courses;
@@ -135,9 +135,9 @@ public:
 	//HASH MAP ADDITION
 	unordered_map<string, int> hashMap;
 	
-	void build_list(string offerings, string requirements, string schedule);
-	bool fill_list(string offerings, string requirements, string schedule);
-	void is_schedule_valid();
+	string build_list(string offerings, string requirements, string schedule);
+	string fill_list(string offerings, string requirements, string schedule);
+	string is_schedule_valid();
 	
 	void sort_schedule();
 	void mark_class_taken(string course_name);
@@ -147,10 +147,9 @@ public:
 	string modify_semester_name_for_sorting(string name);
 	
 	bool is_required_class(string course_name);
-	bool validName(string input);
+	bool is_course_name_valid(string input);
 	bool can_take_class(string course_name);
-	bool csNotInRequirements(string course_name);
-	//bool is_cs_course_offered_and_not_in_reqs(string course_name);
+	bool is_cs_course_offered_and_not_in_reqs(string course_name);
 	bool has_taken_class(string course_name);
 	bool all_mandatory_and_required_classes_taken();
 	bool is_course_available_in_registered_semester(string course_name, char semester);
@@ -158,9 +157,9 @@ public:
 	
 
 	
-	int hashIndex(string name);
+	int get_course_index_for_name(string name);
 	
-	AdjNode * findCourseNode(string course_name);
+	AdjNode * get_node_for_name(string course_name);
 };
 
 
