@@ -18,10 +18,10 @@ int main(int argc, const char * argv[]) {
 	//std::cout << (temp1.is_schedule_valid() ? "Good" : "Bad" ) << std::endl;
 	
 	
-	/* for(int i = 0; i < temp1.total_required_classes; i++)
+	 /*for(int i = 0; i < temp1.required_classes; i++)
 		temp1.nodes[i].print();*/
 	
-	/*for(int i = 0; i < temp1.total_required_classes; i++){
+	/*for(int i = 0; i < temp1.required_classes; i++){
 		std::cout << temp1.nodes[i].course << std::endl;
 	}*/
 	
