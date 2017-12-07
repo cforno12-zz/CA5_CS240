@@ -13,7 +13,7 @@ Course::Course(){
 
 std::ostream &operator<<(std::ostream &out, const Course &in){
 	
-	out << in.course_name << " " << in.num_credits << " " << in.when_offered << " " << in.requirements_type << " " << in.course_type << " ";
+	out << in.course_name << " " << in.num_credits << " " << in.when_offered << " " << in.gen_ed_requirements << " " << in.course_type << " ";
 	for(int i = 0; i < in.total_prerequisites; i++)
 		out << in.prerequisites[i] << " ";
 	out << endl;
