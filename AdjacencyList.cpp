@@ -15,7 +15,7 @@ AdjacencyList::AdjacencyList(){
     choose_course_indexes = 0;
 }
 
-/*void AdjacencyList::test_input(string offerings, string requirements, string schedule){
+void AdjacencyList::test_input(string offerings, string requirements, string schedule){
     string build_return = build_list(offerings, requirements, schedule);
     if(build_return.find("Bad") != string::npos){
         cout << build_return << endl;
@@ -23,12 +23,12 @@ AdjacencyList::AdjacencyList(){
     }
     string is_schedule_valid_return = is_schedule_valid();
     cout << is_schedule_valid_return << endl;
-}*/
+}
 
-void AdjacencyList::build_list(string offerings, string requirements, string schedule){
-    //string fill_return = fill_list(offerings, requirements, schedule);
-    //if(fill_return.find("Bad") != string::npos)
-       // return fill_return;
+string AdjacencyList::build_list(string offerings, string requirements, string schedule){
+    string fill_return = fill_list(offerings, requirements, schedule);
+    if(fill_return.find("Bad") != string::npos)
+        return fill_return;
     for(int i = 0; i < available_courses; i++)
         if(is_cs_course_offered_and_not_in_reqs(all_courses[i].course_name))
             required_classes++;
@@ -88,20 +88,16 @@ void AdjacencyList::build_list(string offerings, string requirements, string sch
         while(getline(input_stream, c_line)){
             vector<string> vector = split(c_line);
             if(vector.size() != 5){
-				cout << "Bad plan. Here's why: Semester " << to_string(total_sems_added + 1) << 				" does not have 4 classes." << endl;
-				return;
-               /* string bad_return = "Bad plan. Here's why: Semester ";
+                string bad_return = "Bad plan. Here's why: Semester ";
                 bad_return.append(to_string(total_sems_added + 1));
                 bad_return.append(" does not have 4 classes.");
-                return bad_return;*/
+                return bad_return;
             }
             Semester * t_sem = new Semester();
             t_sem -> semester_name = modify_semester_name_for_sorting(vector[0]);
             for(int i = 1; i < 5; i++)
-                if(is_course_in_schedule(vector[i])){
-                    cout << "Bad plan. Here's why: Duplicate course in schedule." << endl;
-					return;
-				}
+                if(is_course_in_schedule(vector[i]))
+                    return "Bad plan. Here's why: Duplicate course in schedule.";
             t_sem -> courses[0] = vector[1];
             t_sem -> courses[1] = vector[2];
             t_sem -> courses[2] = vector[3];
@@ -109,17 +105,14 @@ void AdjacencyList::build_list(string offerings, string requirements, string sch
             semesters[total_sems_added] = *t_sem;
             total_sems_added++;
         }
-        if(total_sems_added != 8){
-            cout << "Bad plan. Here's why: Schedule does not have 8 semesters." << endl;
-			return;
-		}
+        if(total_sems_added != 8)
+            return "Bad plan. Here's why: Schedule does not have 8 semesters.";
     }
     sort_schedule();
-    cout << "Good plan. Get to work." << endl;
-	return;
+    return "Good plan. Get to work.";
 }
 
-void AdjacencyList::fill_list(string offerings, string requirements, string schedule){
+string AdjacencyList::fill_list(string offerings, string requirements, string schedule){
     int total_lines = 0;
     int current_line_num = 0;
     int course_index = 0;
@@ -132,10 +125,8 @@ void AdjacencyList::fill_list(string offerings, string requirements, string sche
     if(input_stream.is_open()){
         while(getline(input_stream, c_line)){
             vector<string> vector = split(c_line);
-            if(vector.size() < 3){
-                cout << "Bad plan. Here's why: Course offering format is incorrect." << endl;
-				return;
-			}
+            if(vector.size() < 3)
+                return "Bad plan. Here's why: Course offering format is incorrect.";
             else if(is_course_name_valid(vector[0]))
                 total_lines++;
         }
@@ -199,10 +190,9 @@ void AdjacencyList::fill_list(string offerings, string requirements, string sche
             if(vector[0] == "TOTAL")
                 required_credits = atoi(vector[1].c_str());
             else if(vector[0] == "CREDIT"){
-                if(vector.size() != 3){
-                    cout << "Bad plan. Here's why: Required class format incorrect." << endl;
-					return;
-				}
+                if(vector.size() != 3)
+                    return "Bad plan. Here's why: Required class format incorrect.";
+				
                 /*int strLen = vector[1].length();
 
                   char * creditArray = vector[1].c_str();*/
@@ -223,10 +213,8 @@ void AdjacencyList::fill_list(string offerings, string requirements, string sche
                 if(index_course == -1)
                     continue;
                 char index_2_back = vector[2].back();
-                if(index_2_back != 'R' && index_2_back != 'M' && index_2_back != 'O'){
-                    cout << "Bad plan. Here's why: Required class format incorrect." << endl;
-					return;
-				}
+                if(index_2_back != 'R' && index_2_back != 'M' && index_2_back != 'O')
+                    return "Bad plan. Here's why: Required class format incorrect.";
                 required_classes++;
                 all_courses[index_course].course_type = vector[2];
                 all_courses[index_course].total_prerequisites = vector.size() - 3;
@@ -250,8 +238,7 @@ void AdjacencyList::fill_list(string offerings, string requirements, string sche
             }
         }
     }
-    cout << "Good plan. Get to work." << endl;
-	return;
+    return "Good plan. Get to work.";
 }
 
 void AdjacencyList::sort_schedule(){
@@ -449,15 +436,14 @@ bool AdjacencyList::is_course_in_schedule(string course_name){
 }
 
 
-void AdjacencyList::is_schedule_valid(){
+string AdjacencyList::is_schedule_valid(){
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 4; j++){
             if(get_course_index_for_name(semesters[i].courses[j]) == -1){
-				cout << "Bad plan. Here's why: " << semesters[i].courses[j] << " does not exist." 					<< endl;
-               /* string reason = "Bad plan. Here's why: ";
+                string reason = "Bad plan. Here's why: ";
                 reason.append(semesters[i].courses[j]);
-                reason.append(" does not exist.");*/
-                return;
+                reason.append(" does not exist.");
+                return reason;
             }
         }
     }
@@ -467,22 +453,20 @@ void AdjacencyList::is_schedule_valid(){
             if(can_take_class(semesters[i].courses[j]))
                 mark_class_taken(semesters[i].courses[j]);
             else{
-				cout << "Bad plan. Here's why: " << semesters[i].courses[j] 							<< " cannot be taken due to requirements." << endl;
-                /*string reason = "Bad plan. Here's why: ";
+                string reason = "Bad plan. Here's why: ";
                 reason.append(semesters[i].courses[j]);
-                reason.append(" cannot be taken due to requirements.");*/
-                return;
+                reason.append(" cannot be taken due to requirements.");
+                return reason;
             }
         }
     }
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 4; j++){
             if(!is_course_available_in_registered_semester(semesters[i].courses[j], semesters[i].semester_name.back())){
-				cout << "Bad plan. Here's why: " << semesters[i].courses[j] 								<< " registered in semester it is not offered." << endl;
-              /*  string bad_ret = "Bad plan. Here's why: ";
+                string bad_ret = "Bad plan. Here's why: ";
                 bad_ret.append(semesters[i].courses[j]);
-                bad_ret.append(" registered in semester it is not offered."); */
-                return;
+                bad_ret.append(" registered in semester it is not offered.");
+                return bad_ret;
             }
         }
     }
@@ -500,27 +484,23 @@ void AdjacencyList::is_schedule_valid(){
     }
 
     if(total_taken < choose_course_indexes){
-        cout << "Bad plan. Here's why: Not all choose classes have been taken." << endl;
-		return;
+        return "Bad plan. Here's why: Not all choose classes have been taken.";
     }
     if(!all_mandatory_and_required_classes_taken()){
-        cout << "Bad plan. Here's why: Not all mandatory or required classes have been taken." 			<< endl;
-		return;
+        return "Bad plan. Here's why: Not all mandatory or required classes have been taken.";
     }
     if(credits_taken < required_credits){
-        cout << "Bad plan. Here's why: Not enough credits taken." << endl;
-		return;
+        return "Bad plan. Here's why: Not enough credits taken.";
     }
 
     for(unsigned int i = 0; i < credits.size(); i++){
         if(credits[i]->num_credits_taken < credits[i]->num_credits_to_take){
             cout << credits[i]->credit_type << " Credits: " << credits[i]->num_credits_taken << endl;
-            cout << "Bad plan. Here's why: Not enough " << credits[i]->credit_type 						<< "credits taken." << endl;
-			/*string ret = "Bad plan. Here's why: Not enough ";
+            string ret = "Bad plan. Here's why: Not enough ";
             string gross(1 , credits[i]->credit_type);
             ret.append(gross);
-            ret.append("credits taken.");*/
-            return;
+            ret.append("credits taken.");
+            return ret;
         }
     }
 
@@ -536,6 +516,6 @@ void AdjacencyList::is_schedule_valid(){
       cout << "f Credits: " << total_f_credits_taken << endl;
       return "Bad plan. Here's why: Not enough F credits taken.";
       }*/
-    cout << "Good plan. Get to work." << endl;
-	return;
+    return "Good plan. Get to work.";
 }
+`
