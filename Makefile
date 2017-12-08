@@ -5,7 +5,7 @@ CXXFLAGS:= -c -Wall -I=.
 
 #---------------------------------
 
-all: link test02
+all: link test
 
 link: compile $(SOURCE) $(OBJECT)
 	g++ -o schedule.exe $(OBJECT)

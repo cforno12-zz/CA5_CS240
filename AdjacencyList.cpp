@@ -6,76 +6,73 @@
 #include <iostream>
 #include <vector>
 #include <stdlib.h>
-#include <iterator> 
+#include <iterator>
 
 using namespace std;
 
 Choose::Choose(){
-	total_options = 0;
-	total_to_pick = 0;
-	total_taken = 0;
+    total_options = 0;
+    total_to_pick = 0;
+    total_taken = 0;
 }
 
-	
+
 Choose::~Choose(){
-		
+
 }
 
 Credit::Credit(){
-			credit_type = '0';
-			num_credits_to_take = 0;
-			num_credits_taken = 0;
+    credit_type = '0';
+    num_credits_to_take = 0;
+    num_credits_taken = 0;
 }
 
 Credit::Credit(char type, int toTake){
-			credit_type = type;
-			num_credits_to_take = toTake;
-			num_credits_taken = 0;
+    credit_type = type;
+    num_credits_to_take = toTake;
+    num_credits_taken = 0;
 }
 
 Credit::~Credit(){
-		
+
 }
 
 Semester::Semester(){
-		
+
 }
-	
-	
+
 void Semester::print(){
 		cout << semester_name << " ";
 		for(int j = 0; j < 4; j++)
-			cout << courses[j] << " ";
+        cout << courses[j] << " ";
 };
-	
+
 Semester::~Semester(){
-		
+
 }
 
-	
 void AdjNode::print(){
-	AdjNode * temp = next;
-	
-	cout <<  course.course_name;
-	while(temp != NULL){
-		cout << "  :  " << temp -> course;
-		temp = temp -> next;
-	}
-	cout << endl;
+    AdjNode * temp = next;
+
+    cout <<  course.course_name;
+    while(temp != NULL){
+        cout << "  :  " << temp -> course;
+        temp = temp -> next;
+    }
+    cout << endl;
 }
-	
 AdjNode::AdjNode(){
 		next = NULL;
 }
-	
+
 AdjNode::~AdjNode(){
-	AdjNode * temp = next;
-	AdjNode * to_delete;
-	while(temp != NULL){
-		to_delete = temp;
-		temp = temp -> next;
-		delete to_delete;
-	}
+    AdjNode * temp = next;
+    AdjNode * to_delete;
+    while(temp != NULL){
+        to_delete = temp;
+        temp = temp -> next;
+        delete to_delete;
+    }
 }
 
 AdjacencyList::AdjacencyList(){
@@ -91,8 +88,8 @@ void AdjacencyList::test_input(string offerings, string requirements, string sch
     if(build_return.find("Bad") != string::npos){
         cout << build_return << endl;
     } else {
-		cout << is_schedule_valid() << endl;
-	}
+        cout << is_schedule_valid() << endl;
+    }
 }
 
 string AdjacencyList::build_graph(string offerings, string requirements, string schedule){
@@ -105,11 +102,11 @@ string AdjacencyList::build_graph(string offerings, string requirements, string 
     nodes = new AdjNode[required_classes];
     int j = 0;
 
-	/*CREATING ADJACENCY LIST
-	* Checks if node is either in requirements file or if it is CS not in requirements
-	* Sets up first adjacency node for each of these classes because they may
-	* potentially have prereqs
-	*/
+    /*CREATING ADJACENCY LIST
+     * Checks if node is either in requirements file or if it is CS not in requirements
+     * Sets up first adjacency node for each of these classes because they may
+     * potentially have prereqs
+     */
     for(int i = 0; i < available_courses; i++){
         if(all_courses[i].course_type == "M" || all_courses[i].course_type == "R" || all_courses[i].course_type == "O" || is_cs_course_offered_and_not_in_reqs(all_courses[i].course_name)){
             AdjNode * t_adj = new AdjNode;
@@ -119,20 +116,20 @@ string AdjacencyList::build_graph(string offerings, string requirements, string 
             nodes[j] = *t_adj;
             j++;
         }
-	}
+    }
     for(int i = 0; i < required_classes; i++){
         if(nodes[i].course.course_type == "Y"){
-//==========JUST ADDED
+            //==========JUST ADDED
             for(int j = 0; j < required_classes && j!=i; j++){
                 if(nodes[j].course.course_name[0] != 'C' || nodes[j].course.course_name[1] != 'S')
                     continue;
                 //if(nodes[i].course.course_name == nodes[j].course.course_name)
-                    //continue;
+                //continue;
                 if(nodes[j].course.course_type == "M")
                     continue;
-//=========JUST ADDED
-				if(nodes[j].course.course_type == "O")
-					continue;
+                //=========JUST ADDED
+                if(nodes[j].course.course_type == "O")
+                    continue;
                 AdjNode * temp_node = new AdjNode();
                 temp_node -> course.course_name = nodes[j].course.course_name;
                 if(nodes[i].next == NULL){
@@ -160,41 +157,41 @@ string AdjacencyList::build_graph(string offerings, string requirements, string 
             }
         }
     }
-	//SCEHDULE	
+    //SCEHDULE
     ifstream sched_stream;
     sched_stream.open(schedule.c_str());
     string c_line;
     if(sched_stream.is_open()){
         int total_sems_added = 0;
-		int num_courses_in_semester = 0;
+        int num_courses_in_semester = 0;
         while(getline(sched_stream, c_line)){
-			total_sems = total_sems_added;
+            total_sems = total_sems_added;
             vector<string> vector = split(c_line);
-			num_courses_in_semester = vector.size() - 1;
+            num_courses_in_semester = vector.size() - 1;
 
             Semester * t_sem = new Semester();
             t_sem -> semester_name = modify_semester_name_for_sorting(vector[0]);
             for(int i = 1; i <= num_courses_in_semester; i++){
                 if(is_course_in_schedule(vector[i])){
                     return "Bad plan. Here's why: Duplicate course in schedule.";
-				}
-			}
+                }
+            }
 
-			t_sem -> num_courses_in_sem = num_courses_in_semester;
+            t_sem -> num_courses_in_sem = num_courses_in_semester;
 
-			for(int i = 1; i <= num_courses_in_semester; i++){
+            for(int i = 1; i <= num_courses_in_semester; i++){
 
-				t_sem -> courses.push_back(vector[i]);
-			}
+                t_sem -> courses.push_back(vector[i]);
+            }
 
 
             semesters[total_sems_added] = *t_sem;
             total_sems_added++;
         }
-		total_sems = total_sems_added;
+        total_sems = total_sems_added;
     } else {
-		return "Bad plan. Here's why: Planned Schedule file does not open";
-	}
+        return "Bad plan. Here's why: Planned Schedule file does not open";
+    }
     sort_schedule();
     return "Good plan. Get to work.";
 }
@@ -216,8 +213,8 @@ string AdjacencyList::fill_graph(string offerings, string requirements, string s
                 return "Bad plan. Here's why: Course offering format is incorrect.";
             else if(is_course_name_valid(vector[0]))
                 total_lines++;
-			else 
-				return "Bad plan. Here's why: Course offering format is incorrect.";
+            else
+                return "Bad plan. Here's why: Course offering format is incorrect.";
         }
         available_courses = total_lines;
         input_stream.clear();
@@ -244,8 +241,8 @@ string AdjacencyList::fill_graph(string offerings, string requirements, string s
             current_line_num++;
         }
     } else {
-		return "Bad plan. Here's why: Cannot open course offerings file.";	
-	}	
+        return "Bad plan. Here's why: Cannot open course offerings file.";
+    }
 
     //REQUIREMENTS
     total_lines = 0;
@@ -261,23 +258,22 @@ string AdjacencyList::fill_graph(string offerings, string requirements, string s
             if(vector.size() > 0 && vector[0] == "CHOOSE")
                 choose_course_indexes++;
         }
-       /* if(choose_course_indexes > 0){
-            choose_courses = new Choose[choose_course_indexes];
-			
-		}*/
+        /* if(choose_course_indexes > 0){
+           choose_courses = new Choose[choose_course_indexes];
+           }*/
 
         require_stream.clear();
         require_stream.seekg(0, ios::beg);
-		int totalIndicator = 0;
+        int totalIndicator = 0;
         while(getline(require_stream, c_line, '\n')){
             vector<string> vector = split(c_line);
             if(vector[0] == "TOTAL"){
                 required_credits = atoi(vector[1].c_str());
-				totalIndicator++;
-				if(totalIndicator>1){
-					return "Bad plan. Total required courses line appears more than once.";
-				}
-			}
+                totalIndicator++;
+                if(totalIndicator>1){
+                    return "Bad plan. Total required courses line appears more than once.";
+                }
+            }
             else if(vector[0] == "CREDIT"){
                 if(vector.size() != 3)
                     return "Bad plan. Here's why: Credit requirements format is incorrect.";
@@ -285,17 +281,17 @@ string AdjacencyList::fill_graph(string offerings, string requirements, string s
                 credits.push_back(new Credit(*vector[1].c_str(), atoi(vector[2].c_str())));
             }
             else if(vector[0] == ("COURSE")){
-				if(vector.size() < 3){
-					return "Bad plan. Here's why: Course in requirements file has incorrect format.";
-				}
+                if(vector.size() < 3){
+                    return "Bad plan. Here's why: Course in requirements file has incorrect format.";
+                }
                 int index_course = getHashIndex(vector[1]);
                 if(index_course == -1){
                    	return "Bad plan. Here's why: Course in requirements file that is not in offerings file.";
-				}
+                }
 
-				if(vector[2].length() != 1){
-					return "Bad plan. Here's why: Requirement type length incorrect";
-				}
+                if(vector[2].length() != 1){
+                    return "Bad plan. Here's why: Requirement type length incorrect";
+                }
                 char require_first_char = vector[2][0];
                 if(require_first_char != 'R' && require_first_char != 'M' && require_first_char != 'O')
                     return "Bad plan. Here's why: Required type format incorrect.";
@@ -313,26 +309,24 @@ string AdjacencyList::fill_graph(string offerings, string requirements, string s
                     all_courses[index_course].prerequisites[i - 3] = vector[i];
             }
             else if(vector[0] == "CHOOSE"){
-	      // Choose * choose = new Choose();
-		choose_courses.push_back(new Choose());
-              //  choose -> all_options = new string[vector.size() - 2];
+                // Choose * choose = new Choose();
+                choose_courses.push_back(new Choose());
+                //  choose -> all_options = new string[vector.size() - 2];
                 choose_courses[choose_indexes_added]-> total_options = (int) vector.size() - 2;
-				choose_courses[choose_indexes_added] -> total_to_pick = atoi(vector[1].c_str());
-               /* for(int i = 0; i < choose -> total_options; i++)
-                    choose -> all_options[i] = vector[i + 2];*/
-				for(int i = 0; i < choose_courses[choose_indexes_added] -> total_options; i++)
-				  {
-				    std::cout << vector[i+2] << std::endl;
-				    choose_courses[choose_indexes_added] -> all_options.push_back(vector[i + 2]);}
-				
-               // choose_courses[choose_indexes_added] = *choose;
-				//		choose_courses.push_back(choose);
+                choose_courses[choose_indexes_added] -> total_to_pick = atoi(vector[1].c_str());
+                /* for(int i = 0; i < choose -> total_options; i++)
+                   choose -> all_options[i] = vector[i + 2];*/
+                for(int i = 0; i < choose_courses[choose_indexes_added] -> total_options; i++)
+                    {
+                        choose_courses[choose_indexes_added] -> all_options.push_back(vector[i + 2]);}
+                // choose_courses[choose_indexes_added] = *choose;
+                //		choose_courses.push_back(choose);
                 choose_indexes_added++;
             }
         }
     } else {
-		return "Bad plan. Heres' why: Cannot open requirements file";
-	}
+        return "Bad plan. Heres' why: Cannot open requirements file";
+    }
 
     return "Good plan. Get to work.";
 }
@@ -352,7 +346,7 @@ void AdjacencyList::sort_schedule(){
 }
 
 string AdjacencyList::modify_semester_name_for_sorting(string name){
-   if(name.size() == 0)
+    if(name.size() == 0)
         return name;
     char first = name[0];
     name.erase(name.begin());
@@ -365,46 +359,45 @@ string AdjacencyList::modify_semester_name_for_sorting(string name){
 }
 
 bool AdjacencyList::all_mandatory_and_required_classes_taken(){
-	for(int i =0;i <available_courses; i++){
-		if(all_courses[i].course_type == "M" || all_courses[i].course_type == "R"){
-			if(all_courses[i].has_taken_class == false){
-				return false;
-			}
-		}
-	}
-	
-	return true;
+    for(int i =0;i <available_courses; i++){
+        if(all_courses[i].course_type == "M" || all_courses[i].course_type == "R"){
+            if(all_courses[i].has_taken_class == false){
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 
 bool AdjacencyList::is_cs_course_offered_and_not_in_reqs(string course_name){
-	int index = getHashIndex(course_name);
+    int index = getHashIndex(course_name);
 
-	if(index == -1){
-		return false;	
-	}
+    if(index == -1){
+        return false;
+    }
 
     if(course_name[0] != 'C' || course_name[1] != 'S'){
         return false;
-	}
+    }
 
-	if(all_courses[index].course_type != "M" && all_courses[index].course_type != "R" && 						all_courses[index].course_type != "O"){
-		return true;
-	}
+    if(all_courses[index].course_type != "M" && all_courses[index].course_type != "R" && 						all_courses[index].course_type != "O"){
+        return true;
+    }
 
-	return false;
+    return false;
 }
 
 AdjNode * AdjacencyList::get_node_for_name(string course_name){
-  int i = 0;
-  while(i < required_classes){
-    if(course_name == nodes[i].course.course_name){
-      return &(nodes[i]);
-    } else{
-      i++;
+    int i = 0;
+    while(i < required_classes){
+        if(course_name == nodes[i].course.course_name){
+            return &(nodes[i]);
+        } else{
+            i++;
+        }
     }
-  }
-  return nullptr;
+    return nullptr;
 }
 
 
@@ -420,49 +413,49 @@ int AdjacencyList::getHashIndex(string name){
 
 
 bool AdjacencyList::is_course_name_valid(string input){
-  if(input.size()!=5){
-    return false;
-  }
+    if(input.size()!=5){
+        return false;
+    }
 
-  if(!((input[0]>64 && input[0]<91) || (input[0]>96 && input[0]<123))){
-    return false;
-  }
-  if(!((input[1]>64 && input[1]<91) || (input[1]>96 && input[1]<123))){
-    return false;
-  }
-  if(input[2]<48 || input[2]>57){
-    return false;
-  }
-  if(input[3]<48 || input[3]>57){
-    return false;
-  }
-  if(input[4]<48 || input[4]>57){
-    return false;
-  }
+    if(!((input[0]>64 && input[0]<91) || (input[0]>96 && input[0]<123))){
+        return false;
+    }
+    if(!((input[1]>64 && input[1]<91) || (input[1]>96 && input[1]<123))){
+        return false;
+    }
+    if(input[2]<48 || input[2]>57){
+        return false;
+    }
+    if(input[3]<48 || input[3]>57){
+        return false;
+    }
+    if(input[4]<48 || input[4]>57){
+        return false;
+    }
 
-  return true;
+    return true;
 }
 
 
 vector<string> AdjacencyList::split(string line){
-	stringstream ss(line);
-	istream_iterator<string> begin(ss);
-	istream_iterator<string> end;
-	vector<string> lineVect(begin, end);
-	return lineVect;
+    stringstream ss(line);
+    istream_iterator<string> begin(ss);
+    istream_iterator<string> end;
+    vector<string> lineVect(begin, end);
+    return lineVect;
 }
 
 bool AdjacencyList::is_course_available_in_registered_semester(string course_name, char semester){
     int index = getHashIndex(course_name);
     if(index == -1){
         return false;
-	}
+    }
     if(all_courses[index].when_offered.back() == 'E'){
         return true;
-	}
-	if(all_courses[index].when_offered.find(semester) == string::npos){
-		return false;
-	}
+    }
+    if(all_courses[index].when_offered.find(semester) == string::npos){
+        return false;
+    }
     return true;
 }
 
@@ -490,8 +483,7 @@ bool AdjacencyList::can_take_class(string course_name){
 }
 
 void AdjacencyList::mark_class_taken(string course_name){
-cout << course_name << " HAS BEEN TAKEN" << endl;
-	int index = getHashIndex(course_name);
+    int index = getHashIndex(course_name);
     all_courses[index].has_taken_class = true;
     credits_taken += all_courses[index].num_credits;
 
@@ -501,44 +493,43 @@ cout << course_name << " HAS BEEN TAKEN" << endl;
 
     for(int j = 0; j < strLen; j++){
         for(unsigned int k = 0; k < credits.size(); k++){
-            if(creditArray[j] == credits[k]->credit_type){	
+            if(creditArray[j] == credits[k]->credit_type){
                 credits[k]->num_credits_taken += all_courses[index].num_credits;
             }
-        } 
+        }
     }
 }
 
 bool AdjacencyList::is_required_class(string course_name){
-  int i = getHashIndex(course_name);
-  
-  switch(i){
+    int i = getHashIndex(course_name);
+    switch(i){
 	  case -1:
-		return false;
+        return false;
 	  default:
-		if(all_courses[i].course_type == "X"){
-		  return false;
-		} else { 
-		  return true;
-		}
-  } 
+        if(all_courses[i].course_type == "X"){
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
 
 bool AdjacencyList::has_taken_class(string course_name){
-  int i = getHashIndex(course_name);
-  if(i == -1){
-    return false;
-  }
-  return all_courses[i].has_taken_class;
+    int i = getHashIndex(course_name);
+    if(i == -1){
+        return false;
+    }
+    return all_courses[i].has_taken_class;
 }
 
 
 bool AdjacencyList::is_course_in_schedule(string course_name){
-   for(int i = 0; i < total_sems; i++){
+    for(int i = 0; i < total_sems; i++){
         for(int j = 0; j < semesters[i].num_courses_in_sem; j++){
             if(semesters[i].courses[j] == course_name)
                 return true;
-		}
-	}
+        }
+    }
     return false;
 }
 
@@ -551,18 +542,17 @@ string AdjacencyList::is_schedule_valid(){
                 reason.append(semesters[i].courses[j]);
                 reason.append(" does not exist.");
                 return reason;
-			}
-		
-		    if(can_take_class(semesters[i].courses[j])){
+            }
+            if(can_take_class(semesters[i].courses[j])){
                 mark_class_taken(semesters[i].courses[j]);
-			} else {
+            } else {
                 string reason = "Bad plan. Here's why: ";
                 reason.append(semesters[i].courses[j]);
                 reason.append(" cannot be taken due to requirements.");
                 return reason;
             }
 
-		   if(!is_course_available_in_registered_semester(semesters[i].courses[j], 							semesters[i].semester_name.back())){
+            if(!is_course_available_in_registered_semester(semesters[i].courses[j],semesters[i].semester_name.back())){
                 string bad_ret = "Bad plan. Here's why: ";
                 bad_ret.append(semesters[i].courses[j]);
                 bad_ret.append(" registered in semester it is not offered.");
@@ -570,35 +560,25 @@ string AdjacencyList::is_schedule_valid(){
             }
         }
     }
-    
-   // int total_taken = 0;
+    // int total_taken = 0;
     for(int i = 0; i < choose_course_indexes; i++){
-      std::cout << "CHOOSE COURSE INDEXES: " << choose_course_indexes << std::endl;
         for(int j = 0; j < choose_courses[i]->total_options; j++){
-cout << "TOTAL options: " << choose_courses[i]->total_options << endl;
             int index = getHashIndex(choose_courses[i]->all_options[j]);
             if(index == -1){
                 continue;
-			}
-	    cout << choose_courses[i]->all_options[j] << endl;
+            }
             if(has_taken_class(choose_courses[i]->all_options[j])){
-	      //cout << "TOTAL TAKEN 1 = " << choose_courses[i]->total_taken << endl;
                 choose_courses[i]->total_taken = choose_courses[i]->total_taken + 1;
-		cout << "TOTAL TAKEN 1 = " << choose_courses[i]->total_taken << endl;
-		
-		//break;
+                //break;
             }
         }
     }
 
-	for(int i = 0; i < choose_course_indexes; i++){
-		if(choose_courses[i]->total_taken < choose_courses[i]->total_to_pick){
-			//cout << "Total taken = " << choose_courses[i]->total_taken << endl;
-			//cout << "Total needed = " << choose_courses[i]->total_to_pick << endl;
-			//cout << i << endl;
-		    return "Bad plan. Here's why: Not all choose classes have been taken.";
-		}
-	}
+    for(int i = 0; i < choose_course_indexes; i++){
+        if(choose_courses[i]->total_taken < choose_courses[i]->total_to_pick){
+            return "Bad plan. Here's why: Not all choose classes have been taken.";
+        }
+    }
     if(!all_mandatory_and_required_classes_taken()){
         return "Bad plan. Here's why: Not all mandatory and required classes have been taken.";
     }
@@ -612,7 +592,7 @@ cout << "TOTAL options: " << choose_courses[i]->total_options << endl;
             string ret = "Bad plan. Here's why: Not enough ";
             string gross(1 , credits[i]->credit_type);
             ret.append(gross);
-            ret.append("credits taken.");
+            ret.append(" credits taken.");
             return ret;
         }
     }
