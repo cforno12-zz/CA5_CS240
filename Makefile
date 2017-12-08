@@ -35,3 +35,17 @@ test: schedule.exe
 	echo fails retaking a class
 	./schedule.exe ./test_cases/test5/requirements.txt ./test_cases/test5/course_offerings.txt ./test_cases/test5/planned_schedule.txt
 	echo fails not taking one/enough of the choice classes
+	./schedule.exe ./more_test_cases/test1_pass/requirementFile.txt ./more_test_cases/test1_pass/offeringsFile.txt ./more_test_cases/test1_pass/unorderedSchedule.txt
+	echo good
+	./schedule.exe ./more_test_cases/test2/requirementFile.txt ./more_test_cases/test2/offeringsFile.txt ./more_test_cases/test2/schedule.txt
+	echo not enough C credits
+	./schedule.exe ./more_test_cases/test3/reqs.txt ./more_test_cases/test3/offers.txt ./more_test_cases/test3/schedule.txt
+	echo It should say you dont have enough X credits to graduate.
+	./schedule.exe ./more_test_cases/test4/reqs.txt ./more_test_cases/test4/offers.txt ./more_test_cases/test4/schedule.txt
+	echo prereqs are not coreqs
+	./schedule.exe ./more_test_cases/test5/R1.txt ./more_test_cases/test5/O1.txt ./more_test_cases/test5/P1.txt
+	echo eng125
+	./schedule.exe ./more_test_cases/test6/R1.txt ./more_test_cases/test6/O1.txt ./more_test_cases/test6/P1.txt
+	echo 110 or 210
+	./schedule.exe ./more_test_cases/test7/R1.txt ./more_test_cases/test7/O1.txt ./more_test_cases/test7/P1.txt
+	echo good
