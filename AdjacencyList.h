@@ -33,7 +33,10 @@ class Credit {
 class Semester {
 	public:
 		string semester_name;
-		string courses[4];
+		//string courses[4];
+		//string * courses;
+		vector<string> courses;
+		int num_courses_in_sem;
 		Semester();
 		void print();
 		~Semester();
@@ -58,7 +61,7 @@ class AdjacencyList {
 		int available_courses;
 		int required_classes;
 		int choose_course_indexes;
-
+		int total_sems;
 		int required_credits;
 
 		int credits_taken;

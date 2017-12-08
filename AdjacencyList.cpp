@@ -120,13 +120,17 @@ string AdjacencyList::build_graph(string offerings, string requirements, string 
 	}
     for(int i = 0; i < required_classes; i++){
         if(nodes[i].course.course_type == "Y"){
-            for(int j = 0; j < required_classes; j++){
+//==========JUST ADDED
+            for(int j = 0; j < required_classes && j!=i; j++){
                 if(nodes[j].course.course_name[0] != 'C' || nodes[j].course.course_name[1] != 'S')
                     continue;
-                if(nodes[i].course.course_name == nodes[j].course.course_name)
-                    continue;
+                //if(nodes[i].course.course_name == nodes[j].course.course_name)
+                    //continue;
                 if(nodes[j].course.course_type == "M")
                     continue;
+//=========JUST ADDED
+				if(nodes[j].course.course_type == "O")
+					continue;
                 AdjNode * temp_node = new AdjNode();
                 temp_node -> course.course_name = nodes[j].course.course_name;
                 if(nodes[i].next == NULL){
@@ -143,6 +147,8 @@ string AdjacencyList::build_graph(string offerings, string requirements, string 
             for(int j = 0; j < nodes[i].course.total_prerequisites; j++){
                 AdjNode * temp_node = new AdjNode();
                 temp_node -> course.course_name = nodes[i].course.prerequisites[j];
+//SHOULD WE FIND THE NODE ITSELF? IS THIS JUST THE NAMES
+				//temp_node = &
                 if(nodes[i].next == NULL)
                     nodes[i].next = temp_node;
                 else{
@@ -154,34 +160,56 @@ string AdjacencyList::build_graph(string offerings, string requirements, string 
             }
         }
     }
-    ifstream input_stream;
-    input_stream.open(schedule.c_str());
+	//SCEHDULE	
+    ifstream sched_stream;
+    sched_stream.open(schedule.c_str());
     string c_line;
-    if(input_stream.is_open()){
+    if(sched_stream.is_open()){
         int total_sems_added = 0;
-        while(getline(input_stream, c_line)){
+		int num_courses_in_semester = 0;
+        while(getline(sched_stream, c_line)){
+			total_sems = total_sems_added;
             vector<string> vector = split(c_line);
-            if(vector.size() != 5){
+			num_courses_in_semester = vector.size() - 1;
+//cout << "TOTAL SEMS " << total_sems_added << endl;
+//cout << "NUM COURSES  " << num_courses_in_semester << endl;
+            /*if(vector.size() != 5){
                 string bad_return = "Bad plan. Here's why: Semester ";
                 bad_return.append(to_string(total_sems_added + 1));
                 bad_return.append(" does not have 4 classes.");
                 return bad_return;
-            }
+            }*/
             Semester * t_sem = new Semester();
             t_sem -> semester_name = modify_semester_name_for_sorting(vector[0]);
-            for(int i = 1; i < 5; i++)
-                if(is_course_in_schedule(vector[i]))
+            for(int i = 1; i <= num_courses_in_semester; i++){
+                if(is_course_in_schedule(vector[i])){
                     return "Bad plan. Here's why: Duplicate course in schedule.";
-            t_sem -> courses[0] = vector[1];
+				}
+			}
+//perror("gets here");
+
+			//t_sem -> courses = new string[num_courses_in_semester];
+			t_sem -> num_courses_in_sem = num_courses_in_semester;
+
+			for(int i = 1; i <= num_courses_in_semester; i++){
+//cout << "Adding  " << vector[i] << endl;
+				//t_sem -> courses[i-1] = vector[i];
+				t_sem -> courses.push_back(vector[i]);
+			}
+
+            /*t_sem -> courses[0] = vector[1];
             t_sem -> courses[1] = vector[2];
             t_sem -> courses[2] = vector[3];
-            t_sem -> courses[3] = vector[4];
+            t_sem -> courses[3] = vector[4];*/
             semesters[total_sems_added] = *t_sem;
             total_sems_added++;
         }
-        if(total_sems_added != 8)
-            return "Bad plan. Here's why: Schedule does not have 8 semesters.";
-    }
+		total_sems = total_sems_added;
+        //if(total_sems_added != 8)
+           // return "Bad plan. Here's why: Schedule does not have 8 semesters.";
+    } else {
+		return "Bad plan. Here's why: Planned Schedule file does not open";
+	}
     sort_schedule();
     return "Good plan. Get to work.";
 }
@@ -508,17 +536,23 @@ bool AdjacencyList::has_taken_class(string course_name){
 
 
 bool AdjacencyList::is_course_in_schedule(string course_name){
-    for(int i = 0; i < 8; i++)
-        for(int j = 0; j < 4; j++)
+//cout << course_name << endl;
+
+    for(int i = 0; i < total_sems; i++){
+        for(int j = 0; j < semesters[i].num_courses_in_sem; j++){
+			//cout << "here is course in sch fun" << endl;
+			//cout << semesters[i].courses[j] << endl;
             if(semesters[i].courses[j] == course_name)
                 return true;
+		}
+	}
     return false;
 }
 
 
 string AdjacencyList::is_schedule_valid(){
-    for(int i = 0; i < 8; i++){
-        for(int j = 0; j < 4; j++){
+    for(int i = 0; i < total_sems; i++){
+        for(int j = 0; j < semesters[i].num_courses_in_sem; j++){
             if(getHashIndex(semesters[i].courses[j]) == -1){
                 string reason = "Bad plan. Here's why: ";
                 reason.append(semesters[i].courses[j]);
