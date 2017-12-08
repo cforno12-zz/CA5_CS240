@@ -573,17 +573,20 @@ string AdjacencyList::is_schedule_valid(){
     
    // int total_taken = 0;
     for(int i = 0; i < choose_course_indexes; i++){
+      std::cout << "CHOOSE COURSE INDEXES: " << choose_course_indexes << std::endl;
         for(int j = 0; j < choose_courses[i]->total_options; j++){
-//cout << "TOTAL options: " << choose_courses[i]->total_options << endl;
+cout << "TOTAL options: " << choose_courses[i]->total_options << endl;
             int index = getHashIndex(choose_courses[i]->all_options[j]);
             if(index == -1){
                 continue;
 			}
-	    //cout << choose_courses[i]->all_options[j] << endl;
+	    cout << choose_courses[i]->all_options[j] << endl;
             if(has_taken_class(choose_courses[i]->all_options[j])){
-				//cout << "TOTAL TAKEN 1 = " << choose_courses[i]->total_taken << endl;
-                choose_courses[i]->total_taken++;
-                break;
+	      //cout << "TOTAL TAKEN 1 = " << choose_courses[i]->total_taken << endl;
+                choose_courses[i]->total_taken = choose_courses[i]->total_taken + 1;
+		cout << "TOTAL TAKEN 1 = " << choose_courses[i]->total_taken << endl;
+		
+		//break;
             }
         }
     }
