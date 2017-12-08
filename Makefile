@@ -5,7 +5,7 @@ CXXFLAGS:= -c -Wall -I=.
 
 #---------------------------------
 
-all: link test
+all: link test02
 
 link: compile $(SOURCE) $(OBJECT)
 	g++ -o schedule.exe $(OBJECT)
@@ -23,8 +23,8 @@ compress: clean
 	gzip CA5.tar
 
 test02:
-	./schedule.exe ./more_test_cases/test3/reqs.txt ./more_test_cases/test3/offers.txt ./more_test_cases/test3/schedule.txt
-	echo It should say you dont have enough X credits to graduate.
+	./schedule.exe ./more_test_cases/test8/reqs.txt ./more_test_cases/test8/offers.txt ./more_test_cases/test8/schedule.txt
+	echo It should say you did not take enough choose courses
 
 test: schedule.exe
 	./schedule.exe ./test_cases/requirements.txt ./test_cases/course_offerings.txt ./test_cases/planned_schedule.txt
