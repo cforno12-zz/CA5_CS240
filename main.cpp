@@ -11,6 +11,16 @@ int main(int argc, const char * argv[]) {
     string schedule = argv[3];
     AdjacencyList main;
     main.test_input(offerings, requirements, schedule);
+
+    std::cout << (main.is_schedule_valid() ? "Good" : "Bad" ) << std::endl;
+
+
+    for(int i = 0; i < main.required_classes; i++)
+      main.nodes[i].print();
+
+    for(int i = 0; i < main.required_classes; i++){
+      std::cout << main.nodes[i].course << std::endl;
+    }
     exit(0);
 }
 

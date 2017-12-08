@@ -170,13 +170,14 @@ string AdjacencyList::build_graph(string offerings, string requirements, string 
             num_courses_in_semester = vector.size() - 1;
 
             Semester * t_sem = new Semester();
+            cout <<"here: " << vector[0] <<  endl;
             t_sem -> semester_name = modify_semester_name_for_sorting(vector[0]);
             for(int i = 1; i <= num_courses_in_semester; i++){
                 if(is_course_in_schedule(vector[i])){
                     return "Bad plan. Here's why: Duplicate course in schedule.";
                 }
             }
-
+            cout << num_courses_in_semester << endl;
             t_sem -> num_courses_in_sem = num_courses_in_semester;
 
             for(int i = 1; i <= num_courses_in_semester; i++){
