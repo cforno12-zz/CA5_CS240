@@ -14,8 +14,10 @@ class AdjacencyList;
 
 class Choose {
 	public:			
-		string * all_options;
+		vector<string> all_options;
 		int total_options;
+		int total_to_pick;
+		int total_taken;
 		Choose();
 		~Choose();
 };
@@ -69,7 +71,8 @@ class AdjacencyList {
 		vector<Credit*> credits;
 		AdjNode * nodes;
 		Course * all_courses;
-		Choose * choose_courses;
+		//Choose * choose_courses;
+		vector<Choose*> choose_courses;
 
 
 		Semester semesters[8];
