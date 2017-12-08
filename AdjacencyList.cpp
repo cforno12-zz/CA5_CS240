@@ -102,16 +102,22 @@ string AdjacencyList::build_graph(string offerings, string requirements, string 
             required_classes++;
     nodes = new AdjNode[required_classes];
     int j = 0;
-    for(int i = 0; i < available_courses; i++)
+
+	/*CREATING ADJACENCY LIST
+	* Checks if node is either in requirements file or if it is CS not in requirements
+	* Sets up first adjacency node for each of these classes because they may
+	* potentially have prereqs
+	*/
+    for(int i = 0; i < available_courses; i++){
         if(all_courses[i].course_type == "M" || all_courses[i].course_type == "R" || all_courses[i].course_type == "O" || is_cs_course_offered_and_not_in_reqs(all_courses[i].course_name)){
             AdjNode * t_adj = new AdjNode;
             t_adj -> course = all_courses[i];
             if(is_cs_course_offered_and_not_in_reqs(all_courses[i].course_name))
-                t_adj -> course.course_type = "Y";
+                t_adj -> course.course_type = "Y"; // Special typ for unrequired CS
             nodes[j] = *t_adj;
             j++;
         }
-
+	}
     for(int i = 0; i < required_classes; i++){
         if(nodes[i].course.course_type == "Y"){
             for(int j = 0; j < required_classes; j++){
@@ -258,18 +264,25 @@ string AdjacencyList::fill_graph(string offerings, string requirements, string s
 			}
             else if(vector[0] == "CREDIT"){
                 if(vector.size() != 3)
-                    return "Bad plan. Here's why: Required class format incorrect.";
+                    return "Bad plan. Here's why: Credit requirements format is incorrect.";
 
                 credits.push_back(new Credit(*vector[1].c_str(), atoi(vector[2].c_str())));
             }
             else if(vector[0] == ("COURSE")){
+				if(vector.size() < 3){
+					return "Bad plan. Here's why: Course in requirements file has incorrect format.";
+				}
                 int index_course = getHashIndex(vector[1]);
                 if(index_course == -1){
                    	return "Bad plan. Here's why: Course in requirements file that is not in offerings file.";
 				}
-                char index_2_back = vector[2].back();
-                if(index_2_back != 'R' && index_2_back != 'M' && index_2_back != 'O')
-                    return "Bad plan. Here's why: Required class format incorrect.";
+
+				if(vector[2].length() != 1){
+					return "Bad plan. Here's why: Requirement type length incorrect";
+				}
+                char require_first_char = vector[2][0];
+                if(require_first_char != 'R' && require_first_char != 'M' && require_first_char != 'O')
+                    return "Bad plan. Here's why: Required type format incorrect.";
                 required_classes++;
                 all_courses[index_course].course_type = vector[2];
                 all_courses[index_course].total_prerequisites = vector.size() - 3;
@@ -279,6 +292,7 @@ string AdjacencyList::fill_graph(string offerings, string requirements, string s
                 }
                 else
                     all_courses[index_course].prerequisites = nullptr;
+
                 for(int i = 3; i < (all_courses[index_course].total_prerequisites + 3); i++)
                     all_courses[index_course].prerequisites[i - 3] = vector[i];
             }
