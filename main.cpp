@@ -12,7 +12,7 @@ int main(int argc, const char * argv[]) {
     AdjacencyList main;
     main.test_input(offerings, requirements, schedule);
 
-    std::cout << (main.is_schedule_valid() ? "Good" : "Bad" ) << std::endl;
+    /*std::cout << (main.is_schedule_valid() ? "Good" : "Bad" ) << std::endl;
 
 
     for(int i = 0; i < main.required_classes; i++)
@@ -20,7 +20,7 @@ int main(int argc, const char * argv[]) {
 
     for(int i = 0; i < main.required_classes; i++){
       std::cout << main.nodes[i].course << std::endl;
-    }
+    }*/
     exit(0);
 }
 
