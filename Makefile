@@ -5,7 +5,7 @@ CXXFLAGS:= -c -Wall -I=.
 
 #---------------------------------
 
-all: link test02
+all: link
 
 link: compile $(SOURCE) $(OBJECT)
 	g++ -o schedule.exe $(OBJECT)
@@ -19,10 +19,10 @@ clean:
 	rm -f *.o schedule.exe
 
 compress: clean
-	tar -cvvf CA5.tar *.* Makefile ./test_cases
+	tar -cvvf CA5.tar *.* Makefile 
 	gzip CA5.tar
 
-test02:
+curr_test:
 	./schedule.exe ./more_test_cases/test8/reqs.txt ./more_test_cases/test8/offers.txt ./more_test_cases/test8/schedule.txt
 	echo It should say you did not take enough choose courses
 
@@ -53,3 +53,5 @@ test: schedule.exe
 	echo 110 or 210
 	./schedule.exe ./more_test_cases/test7/R1.txt ./more_test_cases/test7/O1.txt ./more_test_cases/test7/P1.txt
 	echo good
+./schedule.exe ./more_test_cases/test8/reqs.txt ./more_test_cases/test8/offers.txt ./more_test_cases/test8/schedule.txt
+	echo It should say you did not take enough choose courses
