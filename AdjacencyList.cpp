@@ -313,17 +313,20 @@ string AdjacencyList::fill_graph(string offerings, string requirements, string s
                     all_courses[index_course].prerequisites[i - 3] = vector[i];
             }
             else if(vector[0] == "CHOOSE"){
-                Choose * choose = new Choose();
+	      // Choose * choose = new Choose();
+		choose_courses.push_back(new Choose());
               //  choose -> all_options = new string[vector.size() - 2];
-                choose -> total_options = (int) vector.size() - 2;
-				choose -> total_to_pick = atoi(vector[1].c_str());
+                choose_courses[choose_indexes_added]-> total_options = (int) vector.size() - 2;
+				choose_courses[choose_indexes_added] -> total_to_pick = atoi(vector[1].c_str());
                /* for(int i = 0; i < choose -> total_options; i++)
                     choose -> all_options[i] = vector[i + 2];*/
-				for(int i = 0; i < choose -> total_options; i++)
-                    choose -> all_options.push_back(vector[i + 2]);
+				for(int i = 0; i < choose_courses[choose_indexes_added] -> total_options; i++)
+				  {
+				    std::cout << vector[i+2] << std::endl;
+				    choose_courses[choose_indexes_added] -> all_options.push_back(vector[i + 2]);}
 				
                // choose_courses[choose_indexes_added] = *choose;
-				choose_courses.push_back(choose);
+				//		choose_courses.push_back(choose);
                 choose_indexes_added++;
             }
         }
@@ -337,7 +340,7 @@ string AdjacencyList::fill_graph(string offerings, string requirements, string s
 void AdjacencyList::sort_schedule(){
     Semester key;
     int i, j;
-    for (i = 1; i < 8; i++){
+    for (i = 1; i < total_sems; i++){
         key = semesters[i];
         j = i-1;
         while (j >= 0 && semesters[j].semester_name > key.semester_name) {
@@ -487,7 +490,7 @@ bool AdjacencyList::can_take_class(string course_name){
 }
 
 void AdjacencyList::mark_class_taken(string course_name){
-//cout << course_name << " HAS BEEN TAKEN" << endl;
+cout << course_name << " HAS BEEN TAKEN" << endl;
 	int index = getHashIndex(course_name);
     all_courses[index].has_taken_class = true;
     credits_taken += all_courses[index].num_credits;
